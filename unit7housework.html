@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Outcomes Elementary — Family Life</title>
+<style>
+:root{
+ --bg:#f4f6f9;--card:#fff;--ink:#202938;--muted:#697586;--line:#dce3ec;
+ --navy:#203758;--blue:#315f9e;--soft:#edf3fb;--good:#176b3a;--goodbg:#edf8f1;
+ --bad:#a72525;--badbg:#fff0f0;--gold:#76580a;--goldbg:#fff5d3
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.58}
+button,input,select,textarea{font:inherit} button{touch-action:manipulation}
+main{width:min(980px,calc(100% - 14px));margin:auto;padding:10px 0 45px}
+.hero{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-radius:20px;padding:22px;margin-bottom:14px}
+.hero .eyebrow{font-weight:900;letter-spacing:.11em;font-size:.78rem;opacity:.78}
+.hero h1{font-size:clamp(2rem,7vw,3.6rem);line-height:1.03;margin:5px 0 8px}
+.hero p{margin:0;opacity:.92}
+.progress-shell{height:10px;border-radius:999px;background:rgba(255,255,255,.19);overflow:hidden;margin-top:16px}
+.progress-bar{height:100%;width:0;background:#fff;transition:width .2s}
+.progress-label{margin-top:6px;font-weight:800;font-size:.9rem}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(14px,4vw,23px);margin-bottom:14px;box-shadow:0 7px 22px rgba(27,42,63,.045)}
+.section-head{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.section-no{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--navy);color:#fff;font-weight:900;flex:0 0 auto}
+h2{margin:3px 0 0;font-size:clamp(1.35rem,4.8vw,1.9rem);line-height:1.15}
+h3{margin:18px 0 7px}.instructions{color:var(--muted);margin:0 0 13px}
+.tip{background:var(--goldbg);border:1px solid #ead485;color:var(--gold);border-radius:11px;padding:10px 12px;margin:10px 0;font-weight:800}
+.small{font-size:.85rem;color:var(--muted)}
+
+.flash-shell{display:grid;grid-template-columns:220px 1fr;gap:14px}
+.flash-list{display:grid;gap:8px;align-content:start}
+.mode-btn,.btn{border:0;border-radius:10px;min-height:44px;padding:10px 13px;font-weight:850;cursor:pointer}
+.mode-btn{background:#e9eef5;color:var(--ink);text-align:left}.mode-btn.active{background:var(--navy);color:#fff}
+.flash-card{min-height:250px;border:1px solid var(--line);border-radius:17px;background:#fbfcfe;padding:18px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;position:relative}
+.flash-side-label{position:absolute;top:12px;left:14px;color:var(--muted);font-size:.82rem;font-weight:850;letter-spacing:.08em}
+.flash-text{font-size:clamp(1.55rem,5vw,2.25rem);font-weight:900;color:var(--navy);overflow-wrap:anywhere}
+.flash-hint{margin-top:12px;color:var(--muted);font-size:.9rem}
+.flash-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.flash-controls .btn{flex:1 1 100px}
+.primary{background:var(--navy);color:#fff}.secondary{background:#e8edf3;color:var(--ink)}
+.answer-btn{background:#fff0ba;color:#735500}.audio-btn{background:#e7f1ff;color:#264f86}
+.counter{text-align:center;font-weight:850;margin-top:10px;color:var(--muted)}
+
+.intro-text{font-size:1.05rem;background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:13px}
+.clickword{border:0;background:#fff0a7;border-radius:5px;padding:1px 3px;font:inherit;font-weight:700;color:inherit;text-decoration:underline;text-decoration-color:#c4aa3e;text-underline-offset:2px;cursor:pointer}
+.speaking-grid,.exercise-list,.comments{display:grid;gap:10px}
+.speak-card,.row,.comment{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fcfdff}
+.speak-card strong{display:block;margin-bottom:8px}
+textarea{width:100%;font-size:16px;min-height:82px;border:1px solid #abb6c6;border-radius:10px;padding:10px;resize:vertical}
+.sample{display:none;margin-top:9px;border-left:4px solid #d2b24b;background:#fff9e8;padding:9px 11px;border-radius:8px}.sample.open{display:block}
+.comment-head{display:flex;align-items:center;gap:9px}.avatar{width:38px;height:38px;border-radius:50%;background:#e9eef5;color:var(--navy);display:grid;place-items:center;font-weight:900}.comment p{margin:9px 0 0}
+
+.row-head{display:flex;gap:9px;align-items:flex-start}.num{width:28px;height:28px;border-radius:8px;background:#edf1f6;color:var(--navy);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.choices{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.choice{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 10px;min-height:42px;cursor:pointer}.choice input{accent-color:var(--navy)}
+.feedback{font-size:.9rem;font-weight:850;margin-top:7px;min-height:1.1em}.correct{border-color:var(--good)!important;background:var(--goodbg)!important;color:var(--good)!important}.incorrect{border-color:var(--bad)!important;background:var(--badbg)!important;color:var(--bad)!important}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.controls .btn{min-width:110px}.result{margin-top:10px;font-weight:850}
+select,input[type=text]{font-size:16px;border:1px solid #abb6c6;border-radius:9px;padding:9px 10px;min-height:43px;background:#fff}select{width:100%;margin-top:8px}input[type=text]{width:min(260px,100%)}
+
+.role-bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.token{display:inline-flex;align-items:stretch;border:1px solid #cfd8e5;border-radius:11px;overflow:hidden;background:#fff;min-height:44px}.token-main{border:0;background:#fff;padding:9px 11px;font-weight:850;color:#273e63;cursor:pointer}.token-select{border:0;border-left:1px solid var(--line);background:var(--soft);color:var(--blue);width:42px;font-weight:900;font-size:1.08rem;cursor:pointer}.token.used{opacity:.38}.token.selected{outline:3px solid rgba(49,95,158,.22)}
+.role-row{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fcfdff;margin-bottom:8px}
+.dropzone{border:2px dashed #9eabba;border-radius:10px;min-height:44px;padding:8px 10px;background:#fff;color:#778493;font-weight:850;text-align:left;cursor:pointer}.dropzone.filled{border-style:solid;background:#f0f4f9;color:#283f66}
+
+.grammar-box{border:2px solid #b8c3d1;border-radius:13px;padding:14px;background:#fafcff}.grammar-box p{margin:8px 0}.grammar-choice{display:inline-flex;gap:6px;flex-wrap:wrap}.grammar-choice button{border:1px solid #cdd6e3;border-radius:8px;background:#fff;padding:6px 9px;cursor:pointer;font-weight:800}.grammar-choice button.selected{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+.popup-bg{position:fixed;inset:0;background:rgba(10,18,30,.45);display:none;align-items:flex-end;justify-content:center;padding:16px;z-index:60}.popup-bg.open{display:flex}.popup{width:min(520px,100%);background:#fff;border-radius:19px;padding:18px;box-shadow:0 22px 55px rgba(0,0,0,.26);padding-bottom:max(18px,env(safe-area-inset-bottom))}.popup-word{font-size:1.5rem;font-weight:900;color:var(--navy)}.popup-ru{font-size:1.08rem;margin:5px 0 14px}.popup-note{font-size:.84rem;color:var(--muted);margin-top:8px}
+
+@media(max-width:700px){.flash-shell{grid-template-columns:1fr}.flash-list{grid-template-columns:1fr 1fr}.role-row{grid-template-columns:110px 1fr}}
+@media(max-width:460px){main{width:min(100% - 10px,980px);padding-top:6px}.hero,.panel{border-radius:14px}.flash-list{grid-template-columns:1fr}.role-row{grid-template-columns:1fr}.controls .btn{flex:1 1 120px}.choice{width:100%;border-radius:10px}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+  <div class="eyebrow">OUTCOMES ELEMENTARY • FAMILY LIFE</div>
+  <h1>Family life & have to</h1>
+  <p>Vocabulary flashcards, reading, speaking and fully checked grammar practice.</p>
+  <div class="progress-shell"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="progress-label" id="progressLabel">0% completed</div>
+</header>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">★</div><h2>Topical flashcards</h2></div>
+ <p class="instructions">Choose EN→RU or RU→EN. Tap the card to reveal the other side. English audio works in both modes.</p>
+ <div class="flash-shell">
+  <div class="flash-list">
+   <button class="mode-btn active" data-mode="enru">EN → RU</button>
+   <button class="mode-btn" data-mode="ruen">RU → EN</button>
+   <button class="mode-btn" id="shuffleCards">Shuffle cards</button>
+   <button class="mode-btn" id="restartCards">Restart deck</button>
+  </div>
+  <div>
+   <div class="flash-card" id="flashCard" tabindex="0"><div class="flash-side-label" id="flashLabel"></div><div class="flash-text" id="flashText"></div><div class="flash-hint" id="flashHint"></div></div>
+   <div class="flash-controls"><button class="btn secondary" id="prevCard">← Previous</button><button class="btn audio-btn" id="speakCard">🔊 English audio</button><button class="btn primary" id="nextCard">Next →</button></div>
+   <div class="counter" id="flashCounter"></div>
+  </div>
+ </div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">4</div><h2>Speaking</h2></div>
+ <div class="intro-text"><strong>Family life is changing.</strong> In the past, women stayed at home and <button class="clickword" data-en="looked after the children" data-ru="присматривали за детьми">looked after the children</button>. They did all the <button class="clickword" data-en="housework" data-ru="работа по дому">housework</button>, and men <button class="clickword" data-en="earned money" data-ru="зарабатывали деньги">earned money</button> and maybe <button class="clickword" data-en="repaired things" data-ru="чинили вещи">repaired a few things</button> in the house. Now, both parents often have <button class="clickword" data-en="full-time jobs" data-ru="работа на полный день">full-time jobs</button>. Who does all the housework? How does both parents working affect the kids and family life? Is it a good thing?</div>
+ <div class="speaking-grid" id="speakingGrid"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">5</div><h2>Reading: message board</h2></div>
+ <p class="instructions">Read the comments. Useful words and phrases are clickable.</p>
+ <div class="comments" id="comments"></div>
+ <h3>Who is writing each comment?</h3>
+ <p class="instructions">Match each name to a person. There is one person you do not need.</p>
+ <div class="tip">Desktop: drag a role. iPhone: tap ＋ on a role, then tap the target.</div>
+ <div class="role-bank" id="roleBank"></div><div id="roleRows"></div>
+ <div class="controls"><button class="btn primary" id="checkRoles">Check</button><button class="btn secondary" id="resetRoles">Reset</button><button class="btn answer-btn" id="showRoles">Show answers</button></div>
+ <div class="result" id="roleResult"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">6</div><h2>Good, bad, or both?</h2></div>
+ <p class="instructions">Decide if each person thinks both parents working is a good thing, a bad thing, or both good and bad.</p>
+ <div class="exercise-list" id="opinionList"></div>
+ <div class="controls"><button class="btn primary" id="checkOpinions">Check</button><button class="btn secondary" id="resetOpinions">Reset</button></div>
+ <div class="result" id="opinionResult"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">7</div><h2>Your reaction</h2></div>
+ <p class="instructions">Say if you like what each person wrote or not. Give one reason.</p>
+ <div class="exercise-list" id="reactionList"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">9</div><h2>Have to / don’t have to</h2></div>
+ <p class="instructions">Complete the explanation by choosing the correct option.</p>
+ <div class="grammar-box">
+  <p><b>have to / has to + infinitive</b> show it is <span class="grammar-choice" data-answer="necessary"><button type="button">necessary</button><button type="button">not necessary</button></span> to do something.</p>
+  <p><b>don’t have to / doesn’t have to + infinitive</b> show it is <span class="grammar-choice" data-answer="not necessary"><button type="button">necessary</button><button type="button">not necessary</button></span> to do something.</p>
+  <p class="small"><b>Questions:</b> Do you / we / they have to do it? &nbsp; Does he / she have to do it?</p>
+ </div>
+ <div class="controls"><button class="btn primary" id="checkRule">Check rule</button><button class="btn secondary" id="resetRule">Reset</button></div><div class="result" id="ruleResult"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">1</div><h2>Choose the correct option</h2></div>
+ <div class="exercise-list" id="grammarMcqList"></div>
+ <div class="controls"><button class="btn primary" id="checkGrammar1">Check</button><button class="btn secondary" id="resetGrammar1">Reset</button></div><div class="result" id="grammar1Result"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">2</div><h2>Complete with have to / don’t have to + verb</h2></div>
+ <p class="instructions">Use: <b>do, go, leave, wait, work</b>.</p>
+ <div class="exercise-list" id="grammar2List"></div>
+ <div class="controls"><button class="btn primary" id="checkGrammar2">Check</button><button class="btn secondary" id="resetGrammar2">Reset</button><button class="btn answer-btn" id="showGrammar2">Show answers</button></div><div class="result" id="grammar2Result"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">10</div><h2>Complete the sentences</h2></div>
+ <p class="instructions">Use the correct form of <b>have to</b> or <b>don’t have to</b>.</p>
+ <div class="exercise-list" id="grammar10List"></div>
+ <div class="controls"><button class="btn primary" id="checkGrammar10">Check</button><button class="btn secondary" id="resetGrammar10">Reset</button><button class="btn answer-btn" id="showGrammar10">Show answers</button></div><div class="result" id="grammar10Result"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">11</div><h2>Personal speaking</h2></div>
+ <p class="instructions">Say things you have to do:</p>
+ <div class="speaking-grid"><div class="speak-card"><strong>At home</strong><textarea placeholder="I have to..."></textarea></div><div class="speak-card"><strong>At work / school</strong><textarea placeholder="I have to..."></textarea></div><div class="speak-card"><strong>This week</strong><textarea placeholder="I have to..."></textarea></div></div>
+</section>
+
+<div class="controls" style="justify-content:center"><button class="btn secondary" id="resetAll">Reset all saved work</button></div>
+</main>
+
+<div class="popup-bg" id="popupBg" aria-hidden="true"><div class="popup"><div class="popup-word" id="popupWord"></div><div class="popup-ru" id="popupRu"></div><div class="controls"><button class="btn audio-btn" id="popupSpeak">🔊 English audio</button><button class="btn secondary" id="popupClose">Close</button></div><div class="popup-note">Pronunciation uses the best English voice available on the device.</div></div></div>
+
+<script>
+(() => {
+ const FLASHCARDS=[["family life", "семейная жизнь"], ["look after the children", "присматривать за детьми"], ["do the housework", "делать работу по дому"], ["earn money", "зарабатывать деньги"], ["repair things", "чинить вещи"], ["full-time job", "работа на полный день"], ["affect family life", "влиять на семейную жизнь"], ["bring the kids", "привозить / приводить детей"], ["stay at home", "оставаться дома"], ["have a full life", "жить насыщенной жизнью"], ["dishwasher", "посудомоечная машина"], ["fill the dishwasher", "загружать посудомоечную машину"], ["empty the dishwasher", "разгружать посудомоечную машину"], ["cleaner", "уборщик / уборщица"], ["nursery school", "детский сад"], ["pick someone up", "забирать кого-то"], ["feed the baby", "кормить ребёнка"], ["wake up", "просыпаться"], ["society", "общество"], ["stay with the kids", "оставаться с детьми"], ["private school", "частная школа"], ["good education", "хорошее образование"], ["spend the holidays together", "проводить каникулы вместе"], ["public holiday", "государственный праздник / выходной"], ["set the table", "накрывать на стол"], ["pick someone up from school", "забирать кого-то из школы"], ["take something to a shop", "отнести что-то в мастерскую / магазин"], ["go to hospital", "идти / ехать в больницу"], ["tell jokes", "рассказывать шутки"], ["have to", "быть должным / нужно"], ["don’t have to", "не нужно / не обязан"]];
+ const COMMENTS=[{"name": "Bertha", "country": "Canada", "role": "a grandmother", "opinion": "good", "text": "My son Travis brings the kids to my house three days a week — when he has to work. They’re a bit difficult sometimes, but I love being with them. We sing songs and play games. I also think my son’s wife Clara is really great. I’m happy that she has a job and doesn’t have to stay at home all the time. She has a very full life."}, {"name": "Jose", "country": "Chile", "role": "a son", "opinion": "good", "text": "I’m happy both my parents work because they can buy me nice things."}, {"name": "Sophie", "country": "Germany", "role": "a daughter", "opinion": "bad", "text": "We have a dishwasher and I have to fill it and empty it. Mum and Dad say they don’t have time. It’s not fair! My friends don’t have to do jobs in the home. Their parents do them or they have a cleaner!"}, {"name": "Hannah", "country": "Australia", "role": "a mother", "opinion": "both", "text": "I recently started work again after I had my baby, Lianna. My husband takes her to nursery school at nine and I pick her up at five. I then have to do housework and feed Lianna. I also have to get up at night if she wakes up. It’s difficult, but I still want to work. I love my job and I feel like I’m doing something important for society."}, {"name": "Roberto", "country": "Italy", "role": "a father", "opinion": "bad", "text": "I think it’s better to have one parent at home, but it doesn’t have to be the woman. My wife had a better job than me, so I left my job to stay with our kids."}, {"name": "David", "country": "England", "role": "an uncle", "opinion": "good", "text": "Of course both parents want to work. Send your kids to live in a private school. My brother does that and everyone’s happy. The kids always have friends and get a good education. The family spends the holidays together."}];
+ const ROLES=["a grandmother", "a mother", "a father", "a daughter", "a nanny", "an uncle", "a son"];
+ const GRAMMAR=[["I can’t come to the cinema with you. I ___ pick up my little brother from school.", ["have to", "don’t have to"], "have to"], ["It’s your dog, so you ___ feed it and take it for walks.", ["have to", "don’t have to"], "have to"], ["My dad sometimes ___ work really long hours.", ["has to", "doesn’t have to"], "has to"], ["I set the table this morning. You ___ do it now. It’s your turn.", ["have to", "don’t have to"], "don’t have to"], ["Tell Simon he ___ pick me up. I already got a taxi.", ["has to", "doesn’t have to"], "doesn’t have to"], ["I’m afraid I can’t repair it. You ___ take it to a shop.", ["have to", "don’t have to"], "have to"], ["We ___ play computer games if you don’t want to. We can do something else.", ["have to", "don’t have to"], "don’t have to"], ["He’s very ill. He ___ go to hospital.", ["has to", "doesn’t have to"], "has to"], ["I love spending time with my sister’s kids. I tell them stories and we ___ songs together. It’s fun.", ["sing", "have to sing"], "sing"], ["It’s good that we eat together as a family. We chat and ___ jokes to each other. It’s nice.", ["have to tell", "tell"], "tell"]];
+ const EX2=[["It’s late. I ___ now. I don’t want to miss my bus.", "leave", "have to leave"], ["Start eating. You ___ for me.", "wait", "don’t have to wait"], ["My son ___ a lot of homework.", "do", "has to do"], ["Tomorrow is a public holiday, but our boss says we ___. It’s not fair.", "work", "have to work"], ["She ___ to school tomorrow.", "go", "doesn’t have to go"]];
+ const EX10=[["We really ___ do some shopping. We don’t have any food.", ["have to"]], ["The exam’s easy. You ___ study very hard to pass it.", ["don’t have to", "do not have to"]], ["I ___ work today, so we can go out somewhere, if you want.", ["don’t have to", "do not have to"]], ["She can’t play today. She ___ finish her homework.", ["has to"]], ["We have lots of time. We ___ leave now.", ["don’t have to", "do not have to"]], ["He can’t come today. He ___ look after his sister.", ["has to"]], ["___ go to bed now?", ["Do I have to"]], ["What time ___ be there?", ["does he have to"]]];
+ const SPEAKING=[["Who does most of the housework in your family?", "In my family, both adults do housework, but we divide the jobs. One person usually cooks while the other cleans."], ["How does both parents working affect the kids and family life?", "It can make family life busier because parents have less free time, but it can also give the family more financial security."], ["Do you think both parents working is a good thing? Why / why not?", "I think it can be a good thing if the family shares responsibilities and still has enough time together."]];
+ const STORAGE="outcomes_family_life_v2";
+ const norm=s=>(s||"").toLowerCase().replace(/[’‘]/g,"'").replace(/[?.!]+$/,"").replace(/\s+/g," ").trim();
+ const escapeHtml=s=>String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
+
+ let popupText="";
+ function bestVoice(){
+  if(!("speechSynthesis" in window)) return null;
+  const voices=speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang));
+  return voices.find(v=>/Daniel|Samantha|Serena|Siri|Google UK English|Microsoft Sonia|Microsoft Ryan/i.test(v.name))||voices.find(v=>/en-GB/i.test(v.lang))||voices[0]||null;
+ }
+ function speak(text){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.84;const v=bestVoice();if(v)u.voice=v;speechSynthesis.speak(u);
+ }
+ const popupBg=document.getElementById("popupBg");
+ function openPopup(en,ru){popupText=en;document.getElementById("popupWord").textContent=en;document.getElementById("popupRu").textContent=ru;popupBg.classList.add("open");popupBg.setAttribute("aria-hidden","false")}
+ function closePopup(){popupBg.classList.remove("open");popupBg.setAttribute("aria-hidden","true");if("speechSynthesis" in window)speechSynthesis.cancel()}
+ document.getElementById("popupSpeak").addEventListener("click",()=>speak(popupText));
+ document.getElementById("popupClose").addEventListener("click",closePopup);
+ popupBg.addEventListener("click",e=>{if(e.target===popupBg)closePopup()});
+ document.querySelectorAll(".clickword").forEach(w=>w.addEventListener("click",()=>openPopup(w.dataset.en,w.dataset.ru)));
+
+ // Flashcards
+ let deck=[...FLASHCARDS],cardIndex=0,mode="enru",revealed=false;
+ const flashCard=document.getElementById("flashCard");
+ function renderCard(){
+  const [en,ru]=deck[cardIndex];const text=revealed?(mode==="enru"?ru:en):(mode==="enru"?en:ru);
+  const label=revealed?(mode==="enru"?"RUSSIAN":"ENGLISH"):(mode==="enru"?"ENGLISH":"RUSSIAN");
+  document.getElementById("flashText").textContent=text;document.getElementById("flashLabel").textContent=label;
+  document.getElementById("flashHint").textContent=revealed?"Tap to hide the answer":"Tap to reveal the answer";
+  document.getElementById("flashCounter").textContent=(cardIndex+1)+" / "+deck.length;
+ }
+ function flip(){revealed=!revealed;renderCard()}
+ flashCard.addEventListener("click",flip);flashCard.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}});
+ document.querySelectorAll(".mode-btn[data-mode]").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;revealed=false;document.querySelectorAll(".mode-btn[data-mode]").forEach(x=>x.classList.toggle("active",x===b));renderCard()}));
+ document.getElementById("prevCard").addEventListener("click",()=>{cardIndex=(cardIndex-1+deck.length)%deck.length;revealed=false;renderCard()});
+ document.getElementById("nextCard").addEventListener("click",()=>{cardIndex=(cardIndex+1)%deck.length;revealed=false;renderCard()});
+ document.getElementById("speakCard").addEventListener("click",()=>speak(deck[cardIndex][0]));
+ document.getElementById("shuffleCards").addEventListener("click",()=>{for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}cardIndex=0;revealed=false;renderCard()});
+ document.getElementById("restartCards").addEventListener("click",()=>{deck=[...FLASHCARDS];cardIndex=0;revealed=false;renderCard()});
+ renderCard();
+
+ // Speaking
+ const speakingGrid=document.getElementById("speakingGrid");
+ SPEAKING.forEach(([q,sample],i)=>{
+  const card=document.createElement("div");card.className="speak-card";
+  card.innerHTML='<strong>'+(i+1)+'. '+escapeHtml(q)+'</strong><textarea class="persist" placeholder="Write notes or your answer..."></textarea><button type="button" class="btn answer-btn sampleBtn" style="margin-top:8px">Show sample answer</button><div class="sample">'+escapeHtml(sample)+'</div>';
+  const btn=card.querySelector(".sampleBtn"),box=card.querySelector(".sample");btn.addEventListener("click",()=>{const open=box.classList.toggle("open");btn.textContent=open?"Hide sample answer":"Show sample answer"});speakingGrid.appendChild(card);
+ });
+
+ // Reading comments with selected clickable phrases
+ const clickTerms={
+  "brings the kids":["brings the kids","привозит / приводит детей"],"stay at home":["stay at home","оставаться дома"],
+  "full life":["full life","насыщенная жизнь"],"dishwasher":["dishwasher","посудомоечная машина"],
+  "cleaner":["cleaner","уборщик / уборщица"],"nursery school":["nursery school","детский сад"],
+  "pick her up":["pick her up","забирать её"],"wakes up":["wakes up","просыпается"],"society":["society","общество"],
+  "stay with our kids":["stay with our kids","оставаться с нашими детьми"],"private school":["private school","частная школа"],
+  "good education":["good education","хорошее образование"],"spends the holidays together":["spends the holidays together","проводит каникулы вместе"]
+ };
+ function linkedText(text){
+  let safe=escapeHtml(text);
+  Object.keys(clickTerms).sort((a,b)=>b.length-a.length).forEach(key=>{
+   const [en,ru]=clickTerms[key];const escaped=escapeHtml(key);
+   safe=safe.split(escaped).join('<button type="button" class="clickword dynword" data-en="'+escapeHtml(en)+'" data-ru="'+escapeHtml(ru)+'">'+escaped+'</button>');
+  });return safe;
+ }
+ const commentsBox=document.getElementById("comments");
+ COMMENTS.forEach(c=>{
+  const a=document.createElement("article");a.className="comment";a.innerHTML='<div class="comment-head"><span class="avatar">'+escapeHtml(c.name[0])+'</span><div><strong>'+escapeHtml(c.name)+', '+escapeHtml(c.country)+'</strong><div class="small">Message board comment</div></div></div><p>'+linkedText(c.text)+'</p>';commentsBox.appendChild(a);
+ });
+ commentsBox.querySelectorAll(".dynword").forEach(w=>w.addEventListener("click",()=>openPopup(w.dataset.en,w.dataset.ru)));
+
+ // Role drag/drop
+ let selectedRole=null;const roleBank=document.getElementById("roleBank"),roleRows=document.getElementById("roleRows");
+ const roleRu={"a grandmother":"бабушка","a mother":"мать","a father":"отец","a daughter":"дочь","a nanny":"няня","an uncle":"дядя","a son":"сын"};
+ ROLES.forEach(role=>{
+  const tok=document.createElement("div");tok.className="token";tok.dataset.role=role;tok.draggable=true;
+  tok.innerHTML='<button type="button" class="token-main">'+escapeHtml(role)+'</button><button type="button" class="token-select">＋</button>';
+  tok.querySelector(".token-main").addEventListener("click",()=>openPopup(role,roleRu[role]));
+  tok.querySelector(".token-select").addEventListener("click",()=>{if(tok.classList.contains("used"))return;document.querySelectorAll("#roleBank .token.selected").forEach(t=>t.classList.remove("selected"));selectedRole=selectedRole===role?null:role;if(selectedRole)tok.classList.add("selected")});
+  tok.addEventListener("dragstart",e=>{if(tok.classList.contains("used")){e.preventDefault();return}e.dataTransfer.setData("text/plain",role)});roleBank.appendChild(tok);
+ });
+ COMMENTS.forEach(c=>{const row=document.createElement("div");row.className="role-row";row.innerHTML='<strong>'+escapeHtml(c.name)+'</strong><button type="button" class="dropzone" data-correct="'+escapeHtml(c.role)+'">drop / tap role</button>';roleRows.appendChild(row)});
+ function refreshRoleBank(){const used=new Set([...document.querySelectorAll("#roleRows .dropzone")].map(z=>z.dataset.role).filter(Boolean));document.querySelectorAll("#roleBank .token").forEach(t=>t.classList.toggle("used",used.has(t.dataset.role)))}
+ function resetRole(z){z.dataset.role="";z.textContent="drop / tap role";z.className="dropzone";refreshRoleBank()}
+ function placeRole(z,role){document.querySelectorAll("#roleRows .dropzone").forEach(o=>{if(o!==z&&o.dataset.role===role)resetRole(o)});z.dataset.role=role;z.textContent=role;z.className="dropzone filled";selectedRole=null;document.querySelectorAll("#roleBank .token.selected").forEach(t=>t.classList.remove("selected"));refreshRoleBank();save();updateProgress()}
+ document.querySelectorAll("#roleRows .dropzone").forEach(z=>{z.addEventListener("dragover",e=>e.preventDefault());z.addEventListener("drop",e=>{e.preventDefault();const r=e.dataTransfer.getData("text/plain");if(r)placeRole(z,r)});z.addEventListener("click",()=>{if(selectedRole)placeRole(z,selectedRole);else if(z.dataset.role)resetRole(z)})});
+ document.getElementById("checkRoles").addEventListener("click",()=>{let score=0;const zs=[...document.querySelectorAll("#roleRows .dropzone")];zs.forEach(z=>{const g=z.dataset.role===z.dataset.correct;z.classList.toggle("correct",g);z.classList.toggle("incorrect",!g);if(g)score++});document.getElementById("roleResult").textContent="Score: "+score+" / "+zs.length+". One role is not used.";save();updateProgress()});
+ document.getElementById("resetRoles").addEventListener("click",()=>{document.querySelectorAll("#roleRows .dropzone").forEach(resetRole);document.getElementById("roleResult").textContent="";save();updateProgress()});
+ document.getElementById("showRoles").addEventListener("click",()=>{document.querySelectorAll("#roleRows .dropzone").forEach(z=>{placeRole(z,z.dataset.correct);z.classList.add("correct")});document.getElementById("roleResult").textContent="Answers shown. a nanny is not used."});
+
+ // Opinions
+ const opinionList=document.getElementById("opinionList");
+ COMMENTS.forEach((c,i)=>{
+  const row=document.createElement("div");row.className="row";row.dataset.answer=c.opinion;
+  const options=[["good","a good thing"],["bad","a bad thing"],["both","both good and bad"]];
+  const choices=options.map(([v,l])=>'<label class="choice"><input type="radio" name="op_'+i+'" value="'+v+'"> '+l+'</label>').join("");
+  row.innerHTML='<div class="row-head"><div class="num">'+(i+1)+'</div><div><strong>'+escapeHtml(c.name)+'</strong><div class="choices">'+choices+'</div><div class="feedback"></div></div></div>';opinionList.appendChild(row);
+ });
+ document.getElementById("checkOpinions").addEventListener("click",()=>{let score=0;const rows=[...opinionList.querySelectorAll(".row")];rows.forEach(r=>{const ch=r.querySelector("input:checked"),g=ch&&ch.value===r.dataset.answer;r.classList.toggle("correct",!!g);r.classList.toggle("incorrect",!g);r.querySelector(".feedback").textContent=g?"✓ Correct":ch?"✗ Try again":"✗ Choose an answer";if(g)score++});document.getElementById("opinionResult").textContent="Score: "+score+" / "+rows.length;save();updateProgress()});
+ document.getElementById("resetOpinions").addEventListener("click",()=>{opinionList.querySelectorAll("input").forEach(i=>i.checked=false);opinionList.querySelectorAll(".row").forEach(r=>r.classList.remove("correct","incorrect"));opinionList.querySelectorAll(".feedback").forEach(f=>f.textContent="");document.getElementById("opinionResult").textContent="";save();updateProgress()});
+
+ // Reaction
+ const reactionList=document.getElementById("reactionList");
+ COMMENTS.forEach(c=>{const row=document.createElement("div");row.className="row";row.innerHTML='<strong>'+escapeHtml(c.name)+'</strong><select class="persist"><option value="">Choose...</option><option>I agree / I like it</option><option>I disagree / I don’t like it</option><option>I partly agree</option></select><textarea class="persist" placeholder="Give one reason..."></textarea>';reactionList.appendChild(row)});
+
+ // Grammar rule
+ document.querySelectorAll(".grammar-choice").forEach(box=>box.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{box.querySelectorAll("button").forEach(x=>x.classList.remove("selected","correct","incorrect"));b.classList.add("selected");box.dataset.choice=b.textContent;save();updateProgress()})));
+ document.getElementById("checkRule").addEventListener("click",()=>{let score=0;document.querySelectorAll(".grammar-choice").forEach(box=>{const g=box.dataset.choice===box.dataset.answer;box.querySelectorAll("button").forEach(b=>{if(b.classList.contains("selected"))b.classList.add(g?"correct":"incorrect")});if(g)score++});document.getElementById("ruleResult").textContent="Score: "+score+" / 2";save();updateProgress()});
+ document.getElementById("resetRule").addEventListener("click",()=>{document.querySelectorAll(".grammar-choice").forEach(box=>{box.dataset.choice="";box.querySelectorAll("button").forEach(b=>b.className="")});document.getElementById("ruleResult").textContent="";save();updateProgress()});
+
+ // Grammar MCQ
+ const g1=document.getElementById("grammarMcqList");
+ GRAMMAR.forEach(([sent,opts,ans],i)=>{const row=document.createElement("div");row.className="row";row.dataset.answer=ans;const choices=opts.map(o=>'<label class="choice"><input type="radio" name="g1_'+i+'" value="'+escapeHtml(o)+'"> '+escapeHtml(o)+'</label>').join("");row.innerHTML='<div class="row-head"><div class="num">'+(i+1)+'</div><div><div>'+escapeHtml(sent)+'</div><div class="choices">'+choices+'</div><div class="feedback"></div></div></div>';g1.appendChild(row)});
+ document.getElementById("checkGrammar1").addEventListener("click",()=>{let score=0;const rows=[...g1.querySelectorAll(".row")];rows.forEach(r=>{const ch=r.querySelector("input:checked"),g=ch&&ch.value===r.dataset.answer;r.classList.toggle("correct",!!g);r.classList.toggle("incorrect",!g);r.querySelector(".feedback").textContent=g?"✓ Correct":ch?"✗ Try again":"✗ Choose an answer";if(g)score++});document.getElementById("grammar1Result").textContent="Score: "+score+" / "+rows.length;save();updateProgress()});
+ document.getElementById("resetGrammar1").addEventListener("click",()=>{g1.querySelectorAll("input").forEach(i=>i.checked=false);g1.querySelectorAll(".row").forEach(r=>r.classList.remove("correct","incorrect"));g1.querySelectorAll(".feedback").forEach(f=>f.textContent="");document.getElementById("grammar1Result").textContent="";save();updateProgress()});
+
+ // Text input helpers
+ function buildTextExercise(container,data,cls,useVerbHint){
+  data.forEach((item,i)=>{const sent=item[0],answer=useVerbHint?item[2]:item[1][0],answers=useVerbHint?[item[2]]:item[1];const row=document.createElement("div");row.className="row";row.innerHTML='<div class="row-head"><div class="num">'+(i+1)+'</div><div style="width:100%"><div>'+escapeHtml(sent)+'</div><div style="margin-top:8px"><input type="text" class="'+cls+' persist" data-answers=\''+escapeHtml(JSON.stringify(answers))+'\' placeholder="'+(useVerbHint?'Use: '+escapeHtml(item[1]):'Type the missing words')+'"></div><div class="feedback"></div></div></div>';container.appendChild(row)});
+ }
+ const g2=document.getElementById("grammar2List"),g10=document.getElementById("grammar10List");buildTextExercise(g2,EX2,"g2input",true);buildTextExercise(g10,EX10,"g10input",false);
+ function checkInputs(container,sel,resultId){let score=0;const inputs=[...container.querySelectorAll(sel)];inputs.forEach(inp=>{const answers=JSON.parse(inp.dataset.answers).map(norm),g=answers.includes(norm(inp.value));inp.classList.toggle("correct",g);inp.classList.toggle("incorrect",!g);inp.closest(".row").querySelector(".feedback").textContent=g?"✓ Correct":"✗ Try again";if(g)score++});document.getElementById(resultId).textContent="Score: "+score+" / "+inputs.length;save();updateProgress()}
+ function resetInputs(container,sel,resultId){container.querySelectorAll(sel).forEach(i=>{i.value="";i.classList.remove("correct","incorrect")});container.querySelectorAll(".feedback").forEach(f=>f.textContent="");document.getElementById(resultId).textContent="";save();updateProgress()}
+ function showInputs(container,sel,resultId){container.querySelectorAll(sel).forEach(i=>{i.value=JSON.parse(i.dataset.answers)[0];i.classList.add("correct");i.classList.remove("incorrect")});document.getElementById(resultId).textContent="Answers shown.";save();updateProgress()}
+ document.getElementById("checkGrammar2").addEventListener("click",()=>checkInputs(g2,".g2input","grammar2Result"));document.getElementById("resetGrammar2").addEventListener("click",()=>resetInputs(g2,".g2input","grammar2Result"));document.getElementById("showGrammar2").addEventListener("click",()=>showInputs(g2,".g2input","grammar2Result"));
+ document.getElementById("checkGrammar10").addEventListener("click",()=>checkInputs(g10,".g10input","grammar10Result"));document.getElementById("resetGrammar10").addEventListener("click",()=>resetInputs(g10,".g10input","grammar10Result"));document.getElementById("showGrammar10").addEventListener("click",()=>showInputs(g10,".g10input","grammar10Result"));
+
+ // Persistence and progress
+ function allPersist(){return [...document.querySelectorAll(".persist")]}
+ function save(){try{const state={roles:[...document.querySelectorAll("#roleRows .dropzone")].map(z=>z.dataset.role||""),radios:[...document.querySelectorAll('input[type="radio"]')].filter(r=>r.checked).map(r=>({name:r.name,value:r.value})),values:allPersist().map(el=>el.value),rule:[...document.querySelectorAll(".grammar-choice")].map(x=>x.dataset.choice||"")};localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}}
+ function load(){try{const s=JSON.parse(localStorage.getItem(STORAGE)||"null");if(!s)return;(s.roles||[]).forEach((r,i)=>{if(r){const z=document.querySelectorAll("#roleRows .dropzone")[i];if(z)placeRole(z,r)}});(s.radios||[]).forEach(x=>{const r=[...document.querySelectorAll('input[type="radio"][name="'+CSS.escape(x.name)+'"]')].find(r=>r.value===x.value);if(r)r.checked=true});allPersist().forEach((el,i)=>el.value=(s.values||[])[i]||"");[...document.querySelectorAll(".grammar-choice")].forEach((box,i)=>{const v=(s.rule||[])[i]||"";box.dataset.choice=v;box.querySelectorAll("button").forEach(b=>b.classList.toggle("selected",b.textContent===v))});refreshRoleBank()}catch(e){}}
+ function updateProgress(){let total=0,done=0;const zones=[...document.querySelectorAll("#roleRows .dropzone")];total+=zones.length;done+=zones.filter(z=>z.dataset.role).length;const groups=[...new Set([...document.querySelectorAll('input[type="radio"]')].map(r=>r.name))];total+=groups.length;groups.forEach(g=>{if(document.querySelector('input[name="'+CSS.escape(g)+'"]:checked'))done++});const tx=[...document.querySelectorAll("#grammar2List input,#grammar10List input")];total+=tx.length;done+=tx.filter(i=>norm(i.value)).length;const rules=[...document.querySelectorAll(".grammar-choice")];total+=rules.length;done+=rules.filter(r=>r.dataset.choice).length;const pct=total?Math.round(done/total*100):0;document.getElementById("progressBar").style.width=pct+"%";document.getElementById("progressLabel").textContent=pct+"% completed"}
+ document.addEventListener("input",e=>{if(e.target.matches("input,textarea,select")){save();updateProgress()}});document.addEventListener("change",e=>{if(e.target.matches("input,select")){save();updateProgress()}});
+ document.getElementById("resetAll").addEventListener("click",()=>{if(!confirm("Reset all answers and saved progress?"))return;try{localStorage.removeItem(STORAGE)}catch(e){}location.reload()});
+ load();updateProgress();
+})();
+</script>
+</body>
+</html>
