@@ -1,0 +1,396 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"><title>Outcomes Elementary Unit 6 - Education</title><style>
+:root{
+  --bg:#f4f6f9;--card:#fff;--ink:#202938;--muted:#697586;--line:#dce3ec;
+  --accent:#76577e;--accent2:#f1eaf3;--navy:#263b5d;
+  --good:#176b3a;--goodbg:#edf8f1;--bad:#a72525;--badbg:#fff0f0;
+  --gold:#76580a;--goldbg:#fff5d3
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.58}
+button,input,select,textarea{font:inherit}button{touch-action:manipulation}
+main{width:min(980px,calc(100% - 14px));margin:auto;padding:10px 0 46px}
+.hero{background:linear-gradient(135deg,#4c3553,var(--accent));color:#fff;border-radius:20px;padding:22px;margin-bottom:14px}
+.hero .eyebrow{font-size:.78rem;letter-spacing:.12em;font-weight:900;opacity:.8}
+.hero h1{margin:5px 0 8px;font-size:clamp(2rem,7vw,3.5rem);line-height:1.03}
+.hero p{margin:0;opacity:.92}
+.progress-shell{height:10px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden;margin-top:16px}
+.progress-bar{height:100%;width:0;background:#fff;transition:width .2s}
+.progress-label{font-size:.9rem;font-weight:850;margin-top:6px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(14px,4vw,23px);margin-bottom:14px;box-shadow:0 7px 22px rgba(27,42,63,.045)}
+.section-head{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.section-no{width:35px;height:35px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+h2{margin:3px 0 0;font-size:clamp(1.35rem,4.8vw,1.9rem);line-height:1.15}
+h3{margin:18px 0 8px}.instructions{margin:0 0 13px;color:var(--muted)}
+.rule{background:#faf8fc;border:1px solid #dfd3e3;border-left:5px solid var(--accent);border-radius:12px;padding:13px;margin:10px 0}
+.rule p{margin:6px 0}.rule strong{color:#5f4267}
+.example{font-style:italic;color:#42516a}
+.tip{background:var(--goldbg);border:1px solid #ead485;color:var(--gold);border-radius:11px;padding:10px 12px;margin:10px 0;font-weight:800}
+
+/* flashcards */
+.flash-shell{display:grid;grid-template-columns:220px 1fr;gap:14px}
+.flash-menu{display:grid;gap:8px;align-content:start}
+.mode-btn,.btn{border:0;border-radius:10px;min-height:44px;padding:10px 13px;font-weight:850;cursor:pointer}
+.mode-btn{background:#eceff4;color:var(--ink);text-align:left}.mode-btn.active{background:var(--accent);color:#fff}
+.flash-card{min-height:240px;border:1px solid var(--line);border-radius:17px;background:#fcfbfd;padding:18px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;cursor:pointer;position:relative}
+.flash-label{position:absolute;top:12px;left:14px;color:var(--muted);font-size:.82rem;font-weight:900;letter-spacing:.08em}
+.flash-text{font-size:clamp(1.5rem,5vw,2.15rem);font-weight:900;color:#503957;overflow-wrap:anywhere}
+.flash-hint{font-size:.9rem;color:var(--muted);margin-top:10px}
+.flash-controls,.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.flash-controls .btn{flex:1 1 100px}.controls .btn{min-width:110px}
+.primary{background:var(--accent);color:#fff}.secondary{background:#e9edf3;color:var(--ink)}
+.answer-btn{background:#fff0ba;color:#725600}.audio-btn{background:#e8f1ff;color:#234e86}
+.counter{text-align:center;color:var(--muted);font-weight:850;margin-top:9px}
+
+/* exercises */
+.exercise-list{display:grid;gap:10px}.row{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fcfdff}
+.row-grid{display:grid;grid-template-columns:34px 1fr;gap:9px;align-items:start}
+.num{width:28px;height:28px;border-radius:8px;background:#eee9f0;color:#60466a;display:grid;place-items:center;font-weight:900}
+select,input[type=text]{font-size:16px;border:1px solid #aeb8c7;border-radius:9px;padding:9px 10px;min-height:43px;background:#fff;outline:none}
+select:focus,input[type=text]:focus{border-color:#6b4d74;box-shadow:0 0 0 3px rgba(107,77,116,.13)}
+select{margin-top:8px;width:min(300px,100%)}input[type=text]{width:min(380px,100%);margin-top:8px}
+.feedback{font-size:.9rem;font-weight:850;margin-top:7px;min-height:1.1em}
+.correct{border-color:var(--good)!important;background:var(--goodbg)!important;color:var(--good)!important}
+.incorrect{border-color:var(--bad)!important;background:var(--badbg)!important;color:var(--bad)!important}
+.result{font-weight:850;margin-top:10px}
+
+/* tables */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:620px;background:#fff}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+th{background:#f0e8f2;color:#503957}.small{font-size:.88rem;color:var(--muted)}
+
+/* vocab click popup */
+.vocab{border:0;background:#fff0a8;border-radius:5px;padding:1px 4px;font:inherit;font-weight:750;color:inherit;cursor:pointer;text-decoration:underline;text-decoration-color:#c8ae40;text-underline-offset:2px}
+.popup-bg{position:fixed;inset:0;background:rgba(10,18,30,.45);display:none;align-items:flex-end;justify-content:center;padding:16px;z-index:50}
+.popup-bg.open{display:flex}.popup{width:min(520px,100%);background:#fff;border-radius:19px;padding:18px;box-shadow:0 22px 55px rgba(0,0,0,.26);padding-bottom:max(18px,env(safe-area-inset-bottom))}
+.popup-word{font-size:1.48rem;font-weight:900;color:#503957}.popup-ru{font-size:1.07rem;margin:5px 0 14px}.popup-note{font-size:.84rem;color:var(--muted);margin-top:8px}
+
+.translation-row .ru{font-weight:800;color:#3a4556}.translation-row .en-hint{font-size:.85rem;color:var(--muted);margin-top:3px}
+
+@media(max-width:700px){.flash-shell{grid-template-columns:1fr}.flash-menu{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){
+ main{width:min(100% - 10px,980px);padding-top:6px}.hero,.panel{border-radius:14px}.flash-menu{grid-template-columns:1fr}
+ .controls .btn{flex:1 1 120px}.row-grid{grid-template-columns:30px 1fr}
+}
+</style></head><body>
+<main>
+<header class="hero"><div class="eyebrow">OUTCOMES GRAMMAR WORKSHEETS • UNIT 6</div><h1>Education</h1><p>Modifiers, comparatives and extra translation practice.</p><div class="progress-shell"><div class="progress-bar" id="progressBar"></div></div><div class="progress-label" id="progressLabel">0% completed</div></header>
+
+<section class="panel">
+  <div class="section-head"><div class="section-no">★</div><h2>Topical flashcards</h2></div>
+  <p class="instructions">EN→RU and RU→EN. Tap the card to reveal the other side. English audio is built into the activity through your device voice.</p>
+  <div class="flash-shell">
+    <div class="flash-menu">
+      <button class="mode-btn active" data-mode="enru">EN → RU</button>
+      <button class="mode-btn" data-mode="ruen">RU → EN</button>
+      <button class="mode-btn" id="shuffleCards">Shuffle cards</button>
+      <button class="mode-btn" id="restartCards">Restart deck</button>
+    </div>
+    <div>
+      <div class="flash-card" id="flashCard" tabindex="0"><div class="flash-label" id="flashLabel"></div><div class="flash-text" id="flashText"></div><div class="flash-hint" id="flashHint"></div></div>
+      <div class="flash-controls"><button class="btn secondary" id="prevCard">← Previous</button><button class="btn audio-btn" id="speakCard">🔊 English audio</button><button class="btn primary" id="nextCard">Next →</button></div>
+      <div class="counter" id="flashCounter"></div>
+    </div>
+  </div>
+</section>
+<section class="panel">
+ <div class="section-head"><div class="section-no">1</div><h2>Modifiers</h2></div>
+ <div class="rule">
+  <p>Modifiers go before adjectives and change how strong the adjective is.</p>
+  <p><strong>really / very good</strong> = great &nbsp; • &nbsp; <strong>good</strong> &nbsp; • &nbsp; <strong>quite good</strong> &nbsp; • &nbsp; <strong>not very good</strong> = bad</p>
+  <p class="example">The film was <button class="vocab" data-en="quite exciting" data-ru="довольно захватывающий">quite exciting</button>, but the end was disappointing.</p>
+ </div>
+ <p class="instructions">Complete with <b>quite</b>, <b>really</b> or <b>not very</b> and the adjective shown.</p>
+ <div class="exercise-list">
+<div class="row"><div class="row-grid"><div class="num">1</div><div>
+  <div>Ms Green is a ___ teacher. All her students passed the exam.</div>
+  <select class="mod-select persist" data-answer="really" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ good</span>
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">2</div><div>
+  <div>I’m ___ in history, so I want to stop it at the end of the year.</div>
+  <select class="mod-select persist" data-answer="not very" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ interested</span>
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">3</div><div>
+  <div>The university is ___, but it’s not too bad. I can pay for it.</div>
+  <select class="mod-select persist" data-answer="quite" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ expensive</span>
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">4</div><div>
+  <div>One of my classmates is ___. He laughed at my work in front of everybody.</div>
+  <select class="mod-select persist" data-answer="not very" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ nice</span>
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">5</div><div>
+  <div>There’s a ___ girl at school. On the first day of term, she invited me to a party.</div>
+  <select class="mod-select persist" data-answer="really" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ friendly</span>
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">6</div><div>
+  <div>My afternoon classes are occasionally ___, but they’re usually good.</div>
+  <select class="mod-select persist" data-answer="quite" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ boring</span>
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">7</div><div>
+  <div>I’m ___ about my holiday plans. I love Greece so much!</div>
+  <select class="mod-select persist" data-answer="really" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ happy</span>
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">8</div><div>
+  <div>The exams are ___. I passed this year’s easily.</div>
+  <select class="mod-select persist" data-answer="not very" data-progress-item>
+    <option value="">Choose a modifier</option><option value="really">really</option><option value="quite">quite</option><option value="not very">not very</option>
+  </select> <span class="small">+ hard</span>
+  <div class="feedback"></div>
+</div></div></div></div>
+ <div class="controls"><button class="btn primary" id="checkMod">Check</button><button class="btn secondary" id="resetMod">Reset</button><button class="btn answer-btn" id="showMod">Show answers</button></div><div class="result" id="modResult"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">2</div><h2>Comparatives</h2></div>
+ <div class="rule">
+  <p>Use a comparative adjective + <b>than</b> to compare two things.</p>
+  <p>short → <b>shorter</b>; easy → <b>easier</b>; close → <b>closer</b>; hot → <b>hotter</b>; interesting → <b>more interesting</b>.</p>
+  <p>Irregular: <b>good → better</b>, <b>bad → worse</b>.</p>
+ </div>
+ <div class="table-wrap"><table><thead><tr><th></th><th>My first choice university</th><th>My second choice university</th></tr></thead><tbody>
+ <tr><td>World ranking</td><td>140th</td><td>176th</td></tr>
+ <tr><td>Size</td><td>32,000 students</td><td>38,000 students</td></tr>
+ <tr><td>Distance to capital city</td><td>22 kilometres</td><td>162 kilometres</td></tr>
+ <tr><td>Opened in</td><td>1904</td><td>1982</td></tr>
+ <tr><td>Annual cost</td><td>10,000 EUR</td><td>8,000 EUR</td></tr>
+ </tbody></table></div>
+ <p class="instructions"><b>Examples:</b> My first choice is <b>higher than</b> my second choice. My second choice is <b>lower than</b> my first choice.</p>
+ <div class="exercise-list">
+<div class="row"><div class="row-grid"><div class="num">1</div><div>
+  <div>My first choice is ___ my second choice. (size)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;smaller than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">2</div><div>
+  <div>My second choice is ___ my first choice. (size)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;bigger than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">3</div><div>
+  <div>My first choice is ___ my second choice. (distance)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;nearer than&quot;, &quot;closer to the capital city than&quot;, &quot;closer than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">4</div><div>
+  <div>My second choice is ___ my first choice. (distance)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;further than&quot;, &quot;farther than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">5</div><div>
+  <div>My first choice is ___ my second choice. (opened)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;older than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">6</div><div>
+  <div>My second choice is ___ my first choice. (opened)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;more modern than&quot;, &quot;newer than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">7</div><div>
+  <div>My first choice is ___ my second choice. (annual cost)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;more expensive than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row"><div class="row-grid"><div class="num">8</div><div>
+  <div>My second choice is ___ my first choice. (annual cost)</div>
+  <input type="text" class="comp-input persist" data-answers='[&quot;cheaper than&quot;]' data-progress-item placeholder="Type the comparative phrase">
+  <div class="feedback"></div>
+</div></div></div></div>
+ <div class="controls"><button class="btn primary" id="checkComp">Check</button><button class="btn secondary" id="resetComp">Reset</button><button class="btn answer-btn" id="showComp">Show answers</button></div><div class="result" id="compResult"></div>
+</section>
+
+<section class="panel">
+ <div class="section-head"><div class="section-no">RU→EN</div><h2>Extra translation practice</h2></div>
+ <p class="instructions">Translate into English. Use modifiers and comparatives from this unit.</p>
+ <div class="exercise-list">
+<div class="row translation-row"><div class="row-grid"><div class="num">1</div><div>
+  <div class="ru">Мисс Грин действительно хороший преподаватель.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;ms green is a really good teacher&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">2</div><div>
+  <div class="ru">Я не очень интересуюсь историей.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;i&#x27;m not very interested in history&quot;, &quot;i am not very interested in history&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">3</div><div>
+  <div class="ru">Этот университет довольно дорогой.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;this university is quite expensive&quot;, &quot;the university is quite expensive&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">4</div><div>
+  <div class="ru">Сегодняшние занятия довольно скучные.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;today&#x27;s classes are quite boring&quot;, &quot;the classes today are quite boring&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">5</div><div>
+  <div class="ru">Я действительно рад своим планам на каникулы.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;i&#x27;m really happy about my holiday plans&quot;, &quot;i am really happy about my holiday plans&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">6</div><div>
+  <div class="ru">Мой первый университет меньше второго.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;my first university is smaller than my second university&quot;, &quot;my first choice university is smaller than my second choice university&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">7</div><div>
+  <div class="ru">Второй университет дальше от столицы.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;the second university is further from the capital city&quot;, &quot;the second university is farther from the capital city&quot;, &quot;my second choice university is further from the capital city&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">8</div><div>
+  <div class="ru">Первый университет старше второго.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;the first university is older than the second university&quot;, &quot;my first choice university is older than my second choice university&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">9</div><div>
+  <div class="ru">Второй университет современнее первого.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;the second university is more modern than the first university&quot;, &quot;my second choice university is more modern than my first choice university&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">10</div><div>
+  <div class="ru">Первый университет дороже второго.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;the first university is more expensive than the second university&quot;, &quot;my first choice university is more expensive than my second choice university&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">11</div><div>
+  <div class="ru">Второй университет дешевле первого.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;the second university is cheaper than the first university&quot;, &quot;my second choice university is cheaper than my first choice university&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div>
+<div class="row translation-row"><div class="row-grid"><div class="num">12</div><div>
+  <div class="ru">Этот экзамен не очень сложный.</div>
+  <input type="text" class="trans-input persist" data-answers='[&quot;this exam is not very hard&quot;, &quot;this exam isn&#x27;t very hard&quot;, &quot;this exam is not very difficult&quot;]' data-progress-item placeholder="Translate into English">
+  <div class="feedback"></div>
+</div></div></div></div>
+ <div class="controls"><button class="btn primary" id="checkTrans">Check</button><button class="btn secondary" id="resetTrans">Reset</button><button class="btn answer-btn" id="showTrans">Show answers</button></div><div class="result" id="transResult"></div>
+</section>
+<div class="controls" style="justify-content:center"><button class="btn secondary" id="resetAll">Reset all saved work</button></div>
+</main>
+<div class="popup-bg" id="popupBg"><div class="popup"><div class="popup-word" id="popupWord"></div><div class="popup-ru" id="popupRu"></div><div class="controls"><button class="btn audio-btn" id="popupSpeak">🔊 English audio</button><button class="btn secondary" id="popupClose">Close</button></div><div class="popup-note">Pronunciation uses an English voice available on the device.</div></div></div>
+<script>
+function norm(s){
+  return (s||"").toLowerCase().replace(/[’‘]/g,"'").replace(/[?.!]+$/,"").replace(/\s+/g," ").trim();
+}
+function bestVoice(){
+  if(!("speechSynthesis" in window))return null;
+  const voices=speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang));
+  return voices.find(v=>/Daniel|Samantha|Serena|Siri|Google UK English|Microsoft Sonia|Microsoft Ryan/i.test(v.name))
+    || voices.find(v=>/en-GB/i.test(v.lang)) || voices[0] || null;
+}
+function speak(text){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.84;
+  const v=bestVoice();if(v)u.voice=v;speechSynthesis.speak(u);
+}
+function initPopup(){
+  const bg=document.getElementById("popupBg");
+  let current="";
+  window.openVocab=(en,ru)=>{current=en;document.getElementById("popupWord").textContent=en;document.getElementById("popupRu").textContent=ru;bg.classList.add("open")};
+  const close=()=>{bg.classList.remove("open");if("speechSynthesis" in window)speechSynthesis.cancel()};
+  document.getElementById("popupSpeak").addEventListener("click",()=>speak(current));
+  document.getElementById("popupClose").addEventListener("click",close);
+  bg.addEventListener("click",e=>{if(e.target===bg)close()});
+  document.querySelectorAll(".vocab").forEach(v=>v.addEventListener("click",()=>openVocab(v.dataset.en,v.dataset.ru)));
+}
+function initFlashcards(cards){
+  let deck=[...cards],idx=0,mode="enru",revealed=false;
+  const card=document.getElementById("flashCard");
+  function render(){
+    const [en,ru]=deck[idx];
+    document.getElementById("flashText").textContent=revealed?(mode==="enru"?ru:en):(mode==="enru"?en:ru);
+    document.getElementById("flashLabel").textContent=revealed?(mode==="enru"?"RUSSIAN":"ENGLISH"):(mode==="enru"?"ENGLISH":"RUSSIAN");
+    document.getElementById("flashHint").textContent=revealed?"Tap to hide the answer":"Tap to reveal the answer";
+    document.getElementById("flashCounter").textContent=(idx+1)+" / "+deck.length;
+  }
+  function flip(){revealed=!revealed;render()}
+  card.addEventListener("click",flip);
+  card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}});
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b=>b.addEventListener("click",()=>{
+    mode=b.dataset.mode;revealed=false;document.querySelectorAll(".mode-btn[data-mode]").forEach(x=>x.classList.toggle("active",x===b));render();
+  }));
+  document.getElementById("prevCard").addEventListener("click",()=>{idx=(idx-1+deck.length)%deck.length;revealed=false;render()});
+  document.getElementById("nextCard").addEventListener("click",()=>{idx=(idx+1)%deck.length;revealed=false;render()});
+  document.getElementById("speakCard").addEventListener("click",()=>speak(deck[idx][0]));
+  document.getElementById("shuffleCards").addEventListener("click",()=>{for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}idx=0;revealed=false;render()});
+  document.getElementById("restartCards").addEventListener("click",()=>{deck=[...cards];idx=0;revealed=false;render()});
+  render();
+}
+function initPersistence(storageKey){
+  const fields=()=>[...document.querySelectorAll(".persist")];
+  function save(){
+    try{
+      localStorage.setItem(storageKey,JSON.stringify(fields().map(el=>({type:el.type,value:el.value,checked:el.checked}))));
+    }catch(e){}
+  }
+  function load(){
+    try{
+      const s=JSON.parse(localStorage.getItem(storageKey)||"null");if(!s)return;
+      fields().forEach((el,i)=>{const x=s[i];if(!x)return;if(el.type==="radio"||el.type==="checkbox")el.checked=!!x.checked;else el.value=x.value||""});
+    }catch(e){}
+  }
+  document.addEventListener("input",e=>{if(e.target.classList.contains("persist"))save()});
+  document.addEventListener("change",e=>{if(e.target.classList.contains("persist"))save()});
+  document.getElementById("resetAll").addEventListener("click",()=>{if(confirm("Reset all answers and saved progress?")){try{localStorage.removeItem(storageKey)}catch(e){}location.reload()}});
+  load();
+  window.saveProgress=save;
+}
+function updateProgress(){
+  const graded=[...document.querySelectorAll("[data-progress-item]")];
+  let done=0;
+  graded.forEach(el=>{
+    if(el.matches("input[type=text]")){if(norm(el.value))done++}
+    else if(el.matches("select")){if(el.value)done++}
+    else if(el.matches("input[type=radio]")){}
+  });
+  const groups=[...new Set([...document.querySelectorAll('input[type=radio][data-progress-group]')].map(r=>r.name))];
+  const textTotal=graded.filter(x=>!x.matches('input[type=radio]')).length;
+  groups.forEach(g=>{if(document.querySelector('input[name="'+CSS.escape(g)+'"]:checked'))done++});
+  const total=textTotal+groups.length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById("progressBar").style.width=pct+"%";
+  document.getElementById("progressLabel").textContent=pct+"% completed";
+}
+document.addEventListener("input",updateProgress);
+document.addEventListener("change",updateProgress);
+
+const CARDS=[["modifier", "модификатор / слово, меняющее степень признака"], ["adjective", "прилагательное"], ["really good", "действительно очень хороший"], ["quite good", "довольно хороший"], ["not very good", "не очень хороший"], ["exciting", "захватывающий"], ["disappointing", "разочаровывающий"], ["interested in", "заинтересованный в"], ["expensive", "дорогой"], ["friendly", "дружелюбный"], ["boring", "скучный"], ["comparative", "сравнительная степень"], ["compare", "сравнивать"], ["higher", "выше"], ["lower", "ниже"], ["bigger", "больше / крупнее"], ["smaller", "меньше"], ["nearer", "ближе"], ["further", "дальше"], ["older", "старше / более старый"], ["more modern", "более современный"], ["more expensive", "дороже"], ["cheaper", "дешевле"], ["world ranking", "мировой рейтинг"], ["annual cost", "годовая стоимость"], ["distance to the capital city", "расстояние до столицы"]];
+initPopup();initFlashcards(CARDS);initPersistence("outcomes_unit6_education_v1");
+function checkSelects(){
+ let score=0;const xs=[...document.querySelectorAll(".mod-select")];xs.forEach(x=>{const g=x.value===x.dataset.answer;x.classList.toggle("correct",g);x.classList.toggle("incorrect",!g);x.closest(".row").querySelector(".feedback").textContent=g?"✓ Correct":"✗ Try again";if(g)score++});document.getElementById("modResult").textContent="Score: "+score+" / "+xs.length;saveProgress();updateProgress();
+}
+document.getElementById("checkMod").addEventListener("click",checkSelects);
+document.getElementById("resetMod").addEventListener("click",()=>{document.querySelectorAll(".mod-select").forEach(x=>{x.value="";x.classList.remove("correct","incorrect");x.closest(".row").querySelector(".feedback").textContent=""});document.getElementById("modResult").textContent="";saveProgress();updateProgress()});
+document.getElementById("showMod").addEventListener("click",()=>{document.querySelectorAll(".mod-select").forEach(x=>{x.value=x.dataset.answer;x.classList.add("correct");x.classList.remove("incorrect")});document.getElementById("modResult").textContent="Answers shown.";saveProgress();updateProgress()});
+function bindText(prefix,resultId){
+ const check=document.getElementById("check"+prefix),reset=document.getElementById("reset"+prefix),show=document.getElementById("show"+prefix);
+ const sel=prefix==="Comp"?".comp-input":".trans-input";
+ check.addEventListener("click",()=>{let score=0;const xs=[...document.querySelectorAll(sel)];xs.forEach(x=>{const ans=JSON.parse(x.dataset.answers).map(norm),g=ans.includes(norm(x.value));x.classList.toggle("correct",g);x.classList.toggle("incorrect",!g);x.closest(".row").querySelector(".feedback").textContent=g?"✓ Correct":"✗ Try again";if(g)score++});document.getElementById(resultId).textContent="Score: "+score+" / "+xs.length;saveProgress();updateProgress()});
+ reset.addEventListener("click",()=>{document.querySelectorAll(sel).forEach(x=>{x.value="";x.classList.remove("correct","incorrect");x.closest(".row").querySelector(".feedback").textContent=""});document.getElementById(resultId).textContent="";saveProgress();updateProgress()});
+ show.addEventListener("click",()=>{document.querySelectorAll(sel).forEach(x=>{x.value=JSON.parse(x.dataset.answers)[0];x.classList.add("correct");x.classList.remove("incorrect")});document.getElementById(resultId).textContent="Answers shown.";saveProgress();updateProgress()});
+}
+bindText("Comp","compResult");bindText("Trans","transResult");updateProgress();
+</script></body></html>
