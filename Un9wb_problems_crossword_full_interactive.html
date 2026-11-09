@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Problems & Past Participles — Interactive</title>
+<style>
+:root{
+--bg:#f4f6f8;--paper:#fff;--ink:#202936;--muted:#667284;--line:#d8e0e8;
+--blue:#2f6789;--blue2:#eaf3f8;--good:#176a3b;--goodbg:#edf8f1;
+--bad:#a52828;--badbg:#fff0f0;--gold:#71580f;--goldbg:#fff6d5
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55}
+button,input{font:inherit}button{touch-action:manipulation}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(47,103,137,.24);outline-offset:2px}
+main{width:min(1080px,calc(100% - 14px));margin:auto;padding:8px 0 44px}
+.hero{background:linear-gradient(135deg,#254a62,#477792);color:#fff;border-radius:20px;padding:24px;margin-bottom:12px}
+.eyebrow{font-size:.78rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase;opacity:.78}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.04;margin:6px 0}
+.hero p{margin:0;max-width:780px;opacity:.94}
+.progress-shell{height:9px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden;margin-top:15px}
+.progress-bar{height:100%;width:0;background:#fff}
+.progress-label{font-size:.88rem;font-weight:850;margin-top:6px}
+.nav{display:flex;gap:7px;overflow-x:auto;position:sticky;top:5px;z-index:60;background:rgba(244,246,248,.94);backdrop-filter:blur(8px);padding:7px 2px;margin-bottom:8px}
+.nav a{white-space:nowrap;text-decoration:none;color:var(--blue);background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:.88rem;font-weight:850}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:clamp(14px,3.5vw,24px);margin-bottom:14px;box-shadow:0 9px 28px rgba(30,40,54,.045)}
+.tag{display:inline-block;background:var(--blue);color:#fff;border-radius:999px;padding:4px 9px;font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em}
+h2{margin:8px 0 5px;font-size:clamp(1.35rem,4vw,1.95rem)} .instruction{margin:0 0 12px;color:var(--muted)}
+.tip{background:var(--goldbg);border:1px solid #e8d486;color:var(--gold);border-radius:11px;padding:10px 12px;margin:12px 0;font-weight:750}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px} .btn{border:0;border-radius:10px;min-height:44px;padding:10px 14px;font-weight:850;cursor:pointer}
+.primary{background:var(--blue);color:#fff} .secondary{background:#e8edf2;color:var(--ink)} .reveal{background:#fff0ba;color:#705500}
+.score{margin-top:9px;min-height:1.2em;font-weight:900}
+
+.match-layout{display:grid;grid-template-columns:minmax(150px,.7fr) minmax(230px,1.3fr);gap:12px}
+.verb-bank,.phrase-bank{display:grid;gap:7px}
+.verb-chip,.match-target{min-height:46px;border:1px solid #cbd5df;border-radius:10px;background:#fff;padding:9px 11px;font-weight:800;cursor:pointer;text-align:left}
+.verb-chip{color:var(--blue)} .verb-chip.selected{background:var(--blue2);border-color:var(--blue)} .verb-chip.used{opacity:.4}
+.match-target{display:flex;align-items:center;gap:9px} .letter{display:grid;place-items:center;width:26px;height:26px;border-radius:7px;background:#edf1f4;color:var(--muted)}
+.match-state{margin-left:auto;color:var(--blue)}
+.correct{border-color:var(--good)!important;background:var(--goodbg)!important;color:var(--good)!important}
+.incorrect{border-color:var(--bad)!important;background:var(--badbg)!important;color:var(--bad)!important}
+
+.colloc-list,.fill-list{display:grid;gap:9px}
+.colloc-row,.fill-row{display:grid;grid-template-columns:30px 1fr;gap:9px;border:1px solid var(--line);border-radius:11px;padding:10px;background:#fcfdff}
+.given{background:#f6f8fa}
+.smallnum{display:grid;place-items:center;width:27px;height:27px;border-radius:7px;background:#eaf1f5;color:var(--blue);font-weight:900}
+.colloc-opt{border:0;background:transparent;border-radius:6px;padding:3px;cursor:pointer;font-weight:750;color:#27394a}
+.colloc-opt.chosen{text-decoration:line-through 3px var(--bad);background:#fff1f1}
+.colloc-opt.good{text-decoration:line-through 3px var(--good);background:var(--goodbg)}
+.slash{color:#8e98a4} .mini-feedback{min-height:1em;font-size:.86rem;font-weight:850;margin-top:4px}
+.phrase-input{font-size:16px;width:min(290px,58vw);min-height:40px;border:1px solid #abb7c4;border-radius:8px;padding:7px 9px;margin:2px 4px;outline:none}
+
+.cross-layout{display:grid;grid-template-columns:minmax(430px,1.05fr) minmax(300px,.95fr);gap:18px;align-items:start}
+.cross-scroll{overflow-x:auto;padding:6px 2px 12px}
+.crossword{display:grid;grid-template-columns:repeat(14,34px);grid-template-rows:repeat(18,34px);width:max-content;padding:2px;background:#fff}
+.cw-cell{position:relative;width:34px;height:34px;border:1.5px solid #59636d;background:#fff}
+.cw-cell input{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;text-align:center;text-transform:uppercase;font-size:20px;font-weight:900;padding:8px 1px 1px;color:#1e2d38;outline:none}
+.cw-num{position:absolute;z-index:3;top:1px;left:2px;font-size:8px;line-height:1;font-weight:900;color:#394650;pointer-events:none}
+.cw-cell.active-word{background:#eaf4fa} .cw-cell.current{box-shadow:inset 0 0 0 3px #2f6789}
+.clues{display:grid;grid-template-columns:1fr 1fr;gap:12px} .clue-col h3{margin:0 0 7px;color:var(--blue)}
+.clue{display:block;width:100%;border:0;background:transparent;text-align:left;padding:6px 7px;border-radius:8px;line-height:1.35;color:var(--ink);cursor:pointer}
+.clue.active,.clue:hover{background:var(--blue2)} .cross-status{margin-top:9px;padding:9px 11px;border-radius:10px;background:#f5f7f9;color:var(--muted);font-weight:800}
+
+.flash-wrap{display:grid;grid-template-columns:minmax(280px,1fr) minmax(260px,.75fr);gap:16px;align-items:start}
+.flashcard{min-height:270px;perspective:1200px;cursor:pointer}
+.flash-inner{position:relative;min-height:270px;transform-style:preserve-3d;transition:transform .45s}
+.flashcard.flipped .flash-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#fff,#f4f9fc)}
+.back{transform:rotateY(180deg);background:linear-gradient(145deg,#fff8da,#fff)}
+.flash-main{font-size:clamp(1.6rem,5vw,2.45rem);font-weight:950;line-height:1.14} .flash-sub{margin-top:10px;color:var(--muted)}
+.audio-btn{margin-top:18px;border:0;border-radius:999px;background:var(--blue);color:#fff;min-height:44px;padding:9px 14px;font-weight:850;cursor:pointer}
+.flash-side{border-left:1px solid var(--line);padding-left:16px} .mode-row{display:flex;gap:7px;flex-wrap:wrap}
+.mode{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 10px;font-weight:800;cursor:pointer} .mode.active{background:var(--blue2);border-color:var(--blue);color:var(--blue)}
+.card-counter{font-weight:900;color:var(--muted);margin:10px 0}
+
+.adj-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.adj-pill{position:relative;min-height:76px;border:1px solid var(--line);border-radius:11px;background:#fff;text-align:left;padding:10px;cursor:pointer}
+.adj-pill b{display:block;font-size:1.04rem} .adj-pill span{display:block;color:var(--muted);font-size:.88rem;padding-right:25px;margin-top:2px} .adj-pill i{position:absolute;right:9px;top:9px;font-style:normal}
+.adj-pill.positive{border-left:4px solid #5f9b72} .adj-pill.negative{border-left:4px solid #b86b6b} .adj-pill.neutral{border-left:4px solid #8a83b5}
+.quiz-grid{display:grid;gap:8px;margin-top:12px} .adj-q{border:1px solid var(--line);border-radius:11px;padding:11px;background:#fcfdff}
+.adj-options{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px} .adj-choice{min-height:40px;border:1px solid #cbd5df;background:#fff;border-radius:9px;padding:7px 10px;font-weight:800;cursor:pointer}
+
+@media(max-width:820px){.cross-layout,.flash-wrap{grid-template-columns:1fr}.cross-scroll{border:1px solid var(--line);border-radius:12px;padding:10px}.flash-side{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:12px}}
+@media(max-width:580px){main{width:min(100% - 10px,1080px);padding-top:5px}.hero,.panel{border-radius:13px}.match-layout{grid-template-columns:1fr}.clues{grid-template-columns:1fr}.phrase-input{display:block;width:100%;margin:5px 0}.adj-grid{grid-template-columns:1fr 1fr}.controls .btn{flex:1 1 120px}}
+@media(max-width:380px){.adj-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+<div class="eyebrow">Vocabulary • Grammar • Unforgettable!</div>
+<h1>Problems & Past Participles</h1>
+<p>Interactive textbook practice with the original crossword structure, vocabulary cards, Russian translations and pronunciation.</p>
+<div class="progress-shell"><div class="progress-bar" id="progressBar"></div></div>
+<div class="progress-label" id="progressLabel">0% completed</div>
+</header>
+
+<nav class="nav"><a href="#ex1">1 Matching</a><a href="#ex2">2 Collocations</a><a href="#ex3">3 Complete</a><a href="#crossword">4 Crossword</a><a href="#flashcards">Flashcards</a><a href="#adjectives">Adjectives</a></nav>
+
+<section class="panel" id="ex1">
+<span class="tag">Vocabulary • Problems</span>
+<h2>1 Match the verbs to the phrases</h2>
+<p class="instruction">Drag a verb to a phrase, or tap a verb and then tap the phrase.</p>
+<div class="match-layout"><div class="verb-bank"><button class="verb-chip" type="button" draggable="true" data-verb="forget">1. forget</button><button class="verb-chip" type="button" draggable="true" data-verb="make">2. make</button><button class="verb-chip" type="button" draggable="true" data-verb="miss">3. miss</button><button class="verb-chip" type="button" draggable="true" data-verb="lose">4. lose</button><button class="verb-chip" type="button" draggable="true" data-verb="hurt">5. hurt</button><button class="verb-chip" type="button" draggable="true" data-verb="feel">6. feel</button><button class="verb-chip" type="button" draggable="true" data-verb="take">7. take</button></div><div class="phrase-bank"><button class="match-target" type="button" data-answer="miss"><span class="letter">a</span><span>your flight</span><b class="match-state"></b></button><button class="match-target" type="button" data-answer="lose"><span class="letter">b</span><span>your passport</span><b class="match-state"></b></button><button class="match-target" type="button" data-answer="forget"><span class="letter">c</span><span>to lock the door</span><b class="match-state"></b></button><button class="match-target" type="button" data-answer="feel"><span class="letter">d</span><span>ill</span><b class="match-state"></b></button><button class="match-target" type="button" data-answer="make"><span class="letter">e</span><span>a mess</span><b class="match-state"></b></button><button class="match-target" type="button" data-answer="take"><span class="letter">f</span><span>the wrong turn</span><b class="match-state"></b></button><button class="match-target" type="button" data-answer="hurt"><span class="letter">g</span><span>yourself</span><b class="match-state"></b></button></div></div>
+<div class="controls"><button class="btn primary" id="check1">Check</button><button class="btn secondary" id="reset1">Reset</button><button class="btn reveal" id="show1">Show answers</button></div><div class="score" id="score1"></div>
+</section>
+
+<section class="panel" id="ex2">
+<span class="tag">Collocations</span>
+<h2>2 Cross out the word or phrase that doesn’t collocate</h2>
+<p class="instruction">Tap one option in each sentence.</p>
+<div class="colloc-list"><div class="colloc-row"><span class="smallnum">1</span><div>It was very embarrassing. I forgot <button type="button" class="colloc-opt" data-wrong="false">to call him</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">his name</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="true">tell him you called</button>.<div class="mini-feedback"></div></div></div><div class="colloc-row"><span class="smallnum">2</span><div>Mum was surprised that I didn&#x27;t make <button type="button" class="colloc-opt" data-wrong="false">a noise</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="true">my homework</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">a mess</button>.<div class="mini-feedback"></div></div></div><div class="colloc-row"><span class="smallnum">3</span><div>It took a long time to get home because I missed my <button type="button" class="colloc-opt" data-wrong="true">car</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">bus</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">train</button>.<div class="mini-feedback"></div></div></div><div class="colloc-row"><span class="smallnum">4</span><div>Have you ever lost <button type="button" class="colloc-opt" data-wrong="false">your wallet</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="true">your sleep</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">your temper</button>.<div class="mini-feedback"></div></div></div><div class="colloc-row"><span class="smallnum">5</span><div>Andy told me that you hurt <button type="button" class="colloc-opt" data-wrong="false">your hand</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">yourself</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="true">you</button>.<div class="mini-feedback"></div></div></div><div class="colloc-row"><span class="smallnum">6</span><div>I didn&#x27;t sleep very well and today I feel <button type="button" class="colloc-opt" data-wrong="true">worst</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">sick</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">ill</button>.<div class="mini-feedback"></div></div></div><div class="colloc-row"><span class="smallnum">7</span><div>I knew I was in trouble when I took the wrong <button type="button" class="colloc-opt" data-wrong="false">road</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="true">idea</button> <span class="slash">/</span> <button type="button" class="colloc-opt" data-wrong="false">turn</button>.<div class="mini-feedback"></div></div></div></div>
+<div class="controls"><button class="btn primary" id="check2">Check</button><button class="btn secondary" id="reset2">Reset</button><button class="btn reveal" id="show2">Show answers</button></div><div class="score" id="score2"></div>
+</section>
+
+<section class="panel" id="ex3">
+<span class="tag">Vocabulary in context</span>
+<h2>3 Complete the sentences</h2>
+<p class="instruction">Use phrases from Exercise 1. Use the correct tense and change the person where appropriate.</p>
+<div class="fill-list"><div class="fill-row given"><span class="smallnum">1</span><div>I lost my passport so I couldn&#x27;t go travelling.</div></div><div class="fill-row"><span class="smallnum">2</span><div>I drove past the station. I <input class="phrase-input" data-answer="took the wrong turn" autocomplete="off" spellcheck="false"> and ended up at the museum.<div class="mini-feedback"></div></div></div><div class="fill-row"><span class="smallnum">3</span><div>Harrison Ford crashed his plane and <input class="phrase-input" data-answer="hurt himself" autocomplete="off" spellcheck="false"> badly.<div class="mini-feedback"></div></div></div><div class="fill-row"><span class="smallnum">4</span><div>Someone stole my car because I <input class="phrase-input" data-answer="forgot to lock the door" autocomplete="off" spellcheck="false">.<div class="mini-feedback"></div></div></div><div class="fill-row"><span class="smallnum">5</span><div>There was a delay on the road to the airport, so I <input class="phrase-input" data-answer="missed my flight" autocomplete="off" spellcheck="false">.<div class="mini-feedback"></div></div></div><div class="fill-row"><span class="smallnum">6</span><div>On the first day I ate something bad and I <input class="phrase-input" data-answer="felt ill" autocomplete="off" spellcheck="false"> for the rest of the holiday.<div class="mini-feedback"></div></div></div><div class="fill-row"><span class="smallnum">7</span><div>I like everything neat and tidy so please don&#x27;t <input class="phrase-input" data-answer="make a mess" autocomplete="off" spellcheck="false">.<div class="mini-feedback"></div></div></div></div>
+<div class="controls"><button class="btn primary" id="check3">Check</button><button class="btn secondary" id="reset3">Reset</button><button class="btn reveal" id="show3">Show answers</button></div><div class="score" id="score3"></div>
+</section>
+
+<section class="panel" id="crossword">
+<span class="tag">Grammar • Past participles</span>
+<h2>4 Complete the crossword</h2>
+<p class="instruction">Complete each sentence with the verb in brackets in the correct tense.</p>
+<div class="tip">The grid uses the same numbering and intersections as the source. Tap a clue to select a word. At an intersection, tap the square again to switch Across ↔ Down.</div>
+<div class="cross-layout">
+<div>
+<div class="cross-scroll"><div class="crossword" id="cwGrid"><div class="cw-cell" style="grid-row:1;grid-column:12" data-r="0" data-c="11" data-letter="D" data-words="1A 1D"><span class="cw-num">1</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:1;grid-column:13" data-r="0" data-c="12" data-letter="I" data-words="1A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:1;grid-column:14" data-r="0" data-c="13" data-letter="D" data-words="1A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:4;grid-column:8" data-r="3" data-c="7" data-letter="B" data-words="3A"><span class="cw-num">3</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:4;grid-column:9" data-r="3" data-c="8" data-letter="R" data-words="3A 2D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:4;grid-column:10" data-r="3" data-c="9" data-letter="O" data-words="3A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:4;grid-column:11" data-r="3" data-c="10" data-letter="K" data-words="3A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:4;grid-column:12" data-r="3" data-c="11" data-letter="E" data-words="3A 1D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:6;grid-column:7" data-r="5" data-c="6" data-letter="S" data-words="4A 4D"><span class="cw-num">4</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:6;grid-column:8" data-r="5" data-c="7" data-letter="E" data-words="4A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:6;grid-column:9" data-r="5" data-c="8" data-letter="E" data-words="4A 2D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:6;grid-column:10" data-r="5" data-c="9" data-letter="N" data-words="4A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:10;grid-column:3" data-r="9" data-c="2" data-letter="S" data-words="6A"><span class="cw-num">6</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:10;grid-column:4" data-r="9" data-c="3" data-letter="T" data-words="6A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:10;grid-column:5" data-r="9" data-c="4" data-letter="O" data-words="6A 5D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:10;grid-column:6" data-r="9" data-c="5" data-letter="L" data-words="6A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:10;grid-column:7" data-r="9" data-c="6" data-letter="E" data-words="6A 4D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:10;grid-column:8" data-r="9" data-c="7" data-letter="N" data-words="6A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:12;grid-column:1" data-r="11" data-c="0" data-letter="F" data-words="8A"><span class="cw-num">8</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:12;grid-column:2" data-r="11" data-c="1" data-letter="A" data-words="8A 7D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:12;grid-column:3" data-r="11" data-c="2" data-letter="L" data-words="8A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:12;grid-column:4" data-r="11" data-c="3" data-letter="L" data-words="8A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:12;grid-column:5" data-r="11" data-c="4" data-letter="E" data-words="8A 5D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:12;grid-column:6" data-r="11" data-c="5" data-letter="N" data-words="8A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:14;grid-column:1" data-r="13" data-c="0" data-letter="F" data-words="9A"><span class="cw-num">9</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:14;grid-column:2" data-r="13" data-c="1" data-letter="E" data-words="9A 7D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:14;grid-column:3" data-r="13" data-c="2" data-letter="L" data-words="9A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:14;grid-column:4" data-r="13" data-c="3" data-letter="L" data-words="9A 10D"><span class="cw-num">10</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:16;grid-column:4" data-r="15" data-c="3" data-letter="S" data-words="11A 10D"><span class="cw-num">11</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:16;grid-column:5" data-r="15" data-c="4" data-letter="A" data-words="11A"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:16;grid-column:6" data-r="15" data-c="5" data-letter="W" data-words="11A 12D"><span class="cw-num">12</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:2;grid-column:12" data-r="1" data-c="11" data-letter="O" data-words="1D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:3;grid-column:12" data-r="2" data-c="11" data-letter="N" data-words="1D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:3;grid-column:9" data-r="2" data-c="8" data-letter="C" data-words="2D"><span class="cw-num">2</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:5;grid-column:9" data-r="4" data-c="8" data-letter="I" data-words="2D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:7;grid-column:9" data-r="6" data-c="8" data-letter="D" data-words="2D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:7;grid-column:7" data-r="6" data-c="6" data-letter="T" data-words="4D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:8;grid-column:7" data-r="7" data-c="6" data-letter="O" data-words="4D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:9;grid-column:7" data-r="8" data-c="6" data-letter="L" data-words="4D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:8;grid-column:5" data-r="7" data-c="4" data-letter="B" data-words="5D"><span class="cw-num">5</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:9;grid-column:5" data-r="8" data-c="4" data-letter="R" data-words="5D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:11;grid-column:5" data-r="10" data-c="4" data-letter="K" data-words="5D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:13;grid-column:5" data-r="12" data-c="4" data-letter="N" data-words="5D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:11;grid-column:2" data-r="10" data-c="1" data-letter="M" data-words="7D"><span class="cw-num">7</span><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:13;grid-column:2" data-r="12" data-c="1" data-letter="D" data-words="7D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:15;grid-column:4" data-r="14" data-c="3" data-letter="O" data-words="10D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:17;grid-column:4" data-r="16" data-c="3" data-letter="T" data-words="10D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:17;grid-column:6" data-r="16" data-c="5" data-letter="O" data-words="12D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><div class="cw-cell" style="grid-row:18;grid-column:6" data-r="17" data-c="5" data-letter="N" data-words="12D"><input maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false"></div></div></div>
+<div class="cross-status" id="cwStatus">Select a clue or square to begin.</div>
+<div class="controls"><button class="btn primary" id="checkCW">Check crossword</button><button class="btn secondary" id="resetCW">Reset</button><button class="btn reveal" id="showCW">Show answers</button></div>
+<div class="score" id="scoreCW"></div>
+</div>
+<div class="clues"><div class="clue-col"><h3>Across</h3><button class="clue" type="button" data-word="1A"><b>1</b> When did you get here? (do)</button><button class="clue" type="button" data-word="3A"><b>3</b> I _____ my arm two years ago in a game of rugby. (break)</button><button class="clue" type="button" data-word="4A"><b>4</b> She&#x27;s never _____ any James Bond films. (see)</button><button class="clue" type="button" data-word="6A"><b>6</b> Has anyone ever _____ anything from you? (steal)</button><button class="clue" type="button" data-word="8A"><b>8</b> Have you ever _____ down the stairs? (fall)</button><button class="clue" type="button" data-word="9A"><b>9</b> My sister _____ off her bicycle yesterday. (fall)</button><button class="clue" type="button" data-word="11A"><b>11</b> I _____ you in the library but I couldn&#x27;t call out to you. (see)</button></div><div class="clue-col"><h3>Down</h3><button class="clue" type="button" data-word="1D"><b>1</b> Have you ever _____ anything bad? (do)</button><button class="clue" type="button" data-word="2D"><b>2</b> When I got married I was so happy I _____. (cry)</button><button class="clue" type="button" data-word="4D"><b>4</b> The police found the person who _____ my bicycle. (steal)</button><button class="clue" type="button" data-word="5D"><b>5</b> Have you ever _____ a bone? (break)</button><button class="clue" type="button" data-word="7D"><b>7</b> I _____ a mistake in my homework. (make)</button><button class="clue" type="button" data-word="10D"><b>10</b> Our team _____ 1–0. We were all really sad. (lose)</button><button class="clue" type="button" data-word="12D"><b>12</b> My dad _____ £100 on the lottery last Saturday. (win)</button></div></div>
+</div>
+</section>
+
+<section class="panel" id="flashcards">
+<span class="tag">Unforgettable!</span>
+<h2>Flashcards from the reading</h2>
+<p class="instruction">Tap the card to flip it. Use EN → RU or RU → EN. The speaker button plays the English phrase.</p>
+<div class="flash-wrap">
+<div class="flashcard" id="flashcard" tabindex="0">
+<div class="flash-inner">
+<div class="face front"><div class="flash-main" id="frontMain"></div><div class="flash-sub">Tap to reveal</div><button class="audio-btn" id="frontAudio" type="button">🔊 English audio</button></div>
+<div class="face back"><div class="flash-main" id="backMain"></div><div class="flash-sub" id="backSub"></div><button class="audio-btn" id="backAudio" type="button">🔊 English audio</button></div>
+</div></div>
+<div class="flash-side">
+<div class="mode-row"><button class="mode active" data-mode="enru">EN → RU</button><button class="mode" data-mode="ruen">RU → EN</button></div>
+<div class="card-counter" id="cardCounter"></div>
+<div class="controls"><button class="btn secondary" id="prevCard">← Previous</button><button class="btn primary" id="nextCard">Next →</button><button class="btn reveal" id="shuffleCards">Shuffle</button></div>
+<p class="instruction" style="margin-top:12px">Cards recycle vocabulary from the six <b>Unforgettable!</b> stories: Tallinn, the meditation retreat, the birthday speech, the home birth, Ferrari World and the Cup Final.</p>
+</div></div>
+</section>
+
+<section class="panel" id="adjectives">
+<span class="tag">Adjectives</span>
+<h2>Adjectives from the unit</h2>
+<p class="instruction">Tap an adjective to hear it. Russian meanings are shown underneath.</p>
+<div class="adj-grid"><button class="adj-pill positive" type="button" data-en="amazing"><b>amazing</b><span>удивительный; потрясающий</span><i>🔊</i></button><button class="adj-pill negative" type="button" data-en="awful"><b>awful</b><span>ужасный</span><i>🔊</i></button><button class="adj-pill negative" type="button" data-en="boring"><b>boring</b><span>скучный</span><i>🔊</i></button><button class="adj-pill negative" type="button" data-en="embarrassing"><b>embarrassing</b><span>неловкий; смущающий</span><i>🔊</i></button><button class="adj-pill positive" type="button" data-en="exciting"><b>exciting</b><span>захватывающий; волнующий</span><i>🔊</i></button><button class="adj-pill negative" type="button" data-en="frightening"><b>frightening</b><span>пугающий; страшный</span><i>🔊</i></button><button class="adj-pill positive" type="button" data-en="relaxing"><b>relaxing</b><span>расслабляющий</span><i>🔊</i></button><button class="adj-pill negative" type="button" data-en="scary"><b>scary</b><span>страшный; пугающий</span><i>🔊</i></button><button class="adj-pill positive" type="button" data-en="special"><b>special</b><span>особенный</span><i>🔊</i></button><button class="adj-pill negative" type="button" data-en="stressful"><b>stressful</b><span>напряжённый; стрессовый</span><i>🔊</i></button><button class="adj-pill neutral" type="button" data-en="surprising"><b>surprising</b><span>неожиданный; удивительный</span><i>🔊</i></button><button class="adj-pill positive" type="button" data-en="unforgettable"><b>unforgettable</b><span>незабываемый</span><i>🔊</i></button></div>
+<h2 style="margin-top:22px;font-size:1.35rem">Quick adjective check</h2>
+<div class="quiz-grid" id="adjQuiz">
+<div class="adj-q" data-answer="embarrassing"><b>1.</b> Your dad gives a speech about you in front of everyone. It feels …<div class="adj-options"></div></div>
+<div class="adj-q" data-answer="relaxing"><b>2.</b> You spend a quiet week on the beach doing almost nothing. It is …<div class="adj-options"></div></div>
+<div class="adj-q" data-answer="frightening"><b>3.</b> Someone with a gun stops you and steals your money. It is …<div class="adj-options"></div></div>
+<div class="adj-q" data-answer="exciting"><b>4.</b> You ride one of the fastest roller coasters in the world. It is …<div class="adj-options"></div></div>
+<div class="adj-q" data-answer="stressful"><b>5.</b> Your flight is delayed for hours and the airline loses your bags. It is …<div class="adj-options"></div></div>
+<div class="adj-q" data-answer="unforgettable"><b>6.</b> An experience is so memorable that you know you will always remember it. It is …<div class="adj-options"></div></div>
+</div><div class="score" id="scoreAdj"></div>
+</section>
+
+<section class="panel"><button class="btn secondary" id="resetAll">Reset all saved progress</button></section>
+</main>
+
+<script>
+(() => {
+const STORAGE="problems_crossword_unforgettable_v1";
+const WORDS=[{"num": 1, "dir": "A", "answer": "DID", "r": 0, "c": 11, "clue": "When did you get here? (do)"}, {"num": 3, "dir": "A", "answer": "BROKE", "r": 3, "c": 7, "clue": "I _____ my arm two years ago in a game of rugby. (break)"}, {"num": 4, "dir": "A", "answer": "SEEN", "r": 5, "c": 6, "clue": "She's never _____ any James Bond films. (see)"}, {"num": 6, "dir": "A", "answer": "STOLEN", "r": 9, "c": 2, "clue": "Has anyone ever _____ anything from you? (steal)"}, {"num": 8, "dir": "A", "answer": "FALLEN", "r": 11, "c": 0, "clue": "Have you ever _____ down the stairs? (fall)"}, {"num": 9, "dir": "A", "answer": "FELL", "r": 13, "c": 0, "clue": "My sister _____ off her bicycle yesterday. (fall)"}, {"num": 11, "dir": "A", "answer": "SAW", "r": 15, "c": 3, "clue": "I _____ you in the library but I couldn't call out to you. (see)"}, {"num": 1, "dir": "D", "answer": "DONE", "r": 0, "c": 11, "clue": "Have you ever _____ anything bad? (do)"}, {"num": 2, "dir": "D", "answer": "CRIED", "r": 2, "c": 8, "clue": "When I got married I was so happy I _____. (cry)"}, {"num": 4, "dir": "D", "answer": "STOLE", "r": 5, "c": 6, "clue": "The police found the person who _____ my bicycle. (steal)"}, {"num": 5, "dir": "D", "answer": "BROKEN", "r": 7, "c": 4, "clue": "Have you ever _____ a bone? (break)"}, {"num": 7, "dir": "D", "answer": "MADE", "r": 10, "c": 1, "clue": "I _____ a mistake in my homework. (make)"}, {"num": 10, "dir": "D", "answer": "LOST", "r": 13, "c": 3, "clue": "Our team _____ 1–0. We were all really sad. (lose)"}, {"num": 12, "dir": "D", "answer": "WON", "r": 15, "c": 5, "clue": "My dad _____ £100 on the lottery last Saturday. (win)"}];
+const FLASH=[{"en": "national dance and song festival", "ru": "национальный фестиваль танца и песни"}, {"en": "sing together", "ru": "петь вместе"}, {"en": "start crying", "ru": "начать плакать"}, {"en": "stressful", "ru": "напряжённый; вызывающий стресс"}, {"en": "meditation centre", "ru": "центр медитации"}, {"en": "relax completely", "ru": "полностью расслабиться"}, {"en": "give a speech", "ru": "произнести речь"}, {"en": "embarrassing", "ru": "неловкий; смущающий"}, {"en": "unforgettable", "ru": "незабываемый"}, {"en": "extra special", "ru": "особенно значимый; особенный"}, {"en": "be in a lot of pain", "ru": "испытывать сильную боль"}, {"en": "call an ambulance", "ru": "вызвать скорую помощь"}, {"en": "scary", "ru": "страшный; пугающий"}, {"en": "long queues", "ru": "длинные очереди"}, {"en": "roller coaster", "ru": "американские горки"}, {"en": "exciting", "ru": "захватывающий; волнующий"}, {"en": "steal my wallet", "ru": "украсть мой кошелёк"}, {"en": "miss my train", "ru": "опоздать на поезд"}, {"en": "take a long time to get home", "ru": "долго добираться домой"}];
+const norm=s=>(s||"").toLowerCase().replace(/[’‘]/g,"'").replace(/[.!?,;:]+$/,"").replace(/\s+/g," ").trim();
+
+function speak(text){
+ if(!("speechSynthesis" in window))return;
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.84;
+ const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang));
+ u.voice=vs.find(v=>/Daniel|Serena|Sonia|Ryan|Google UK English|Samantha/i.test(v.name))||vs[0]||null;
+ speechSynthesis.speak(u);
+}
+
+// EX 1
+let selectedVerb=null;
+const verbs=[...document.querySelectorAll(".verb-chip")];
+const targets=[...document.querySelectorAll(".match-target")];
+function refreshVerbs(){
+ const used=new Set(targets.map(t=>t.dataset.verb).filter(Boolean));
+ verbs.forEach(v=>v.classList.toggle("used",used.has(v.dataset.verb)));
+}
+function placeVerb(t,v){
+ targets.forEach(o=>{if(o!==t&&o.dataset.verb===v){delete o.dataset.verb;o.querySelector(".match-state").textContent="";o.classList.remove("correct","incorrect");}});
+ t.dataset.verb=v;t.querySelector(".match-state").textContent=v;
+ selectedVerb=null;verbs.forEach(x=>x.classList.remove("selected"));refreshVerbs();save();progress();
+}
+verbs.forEach(v=>{
+ v.onclick=()=>{if(v.classList.contains("used"))return;verbs.forEach(x=>x.classList.remove("selected"));selectedVerb=selectedVerb===v.dataset.verb?null:v.dataset.verb;if(selectedVerb)v.classList.add("selected");};
+ v.addEventListener("dragstart",e=>{if(v.classList.contains("used")){e.preventDefault();return}e.dataTransfer.setData("text/plain",v.dataset.verb);});
+});
+targets.forEach(t=>{
+ t.onclick=()=>{if(selectedVerb)placeVerb(t,selectedVerb)};
+ t.addEventListener("dragover",e=>e.preventDefault());
+ t.addEventListener("drop",e=>{e.preventDefault();const v=e.dataTransfer.getData("text/plain");if(v)placeVerb(t,v);});
+});
+check1.onclick=()=>{let s=0;targets.forEach(t=>{const ok=t.dataset.verb===t.dataset.answer;t.classList.toggle("correct",ok);t.classList.toggle("incorrect",!ok);if(ok)s++;});score1.textContent=`Score: ${s} / 7`;save();progress();};
+reset1.onclick=()=>{targets.forEach(t=>{delete t.dataset.verb;t.querySelector(".match-state").textContent="";t.classList.remove("correct","incorrect");});score1.textContent="";refreshVerbs();save();progress();};
+show1.onclick=()=>{targets.forEach(t=>{placeVerb(t,t.dataset.answer);t.classList.add("correct");});score1.textContent="Answers shown.";save();progress();};
+
+// EX 2
+const collRows=[...document.querySelectorAll(".colloc-row")];
+collRows.forEach(r=>r.querySelectorAll(".colloc-opt").forEach(o=>o.onclick=()=>{
+ r.querySelectorAll(".colloc-opt").forEach(x=>x.classList.remove("chosen","good","incorrect"));o.classList.add("chosen");r.dataset.choice=o.textContent.trim();save();progress();
+}));
+check2.onclick=()=>{let s=0;collRows.forEach(r=>{const o=r.querySelector(".chosen"),ok=o&&o.dataset.wrong==="true";if(o)o.classList.add(ok?"good":"incorrect");r.querySelector(".mini-feedback").textContent=ok?"✓ Correct":"✗ Try again";if(ok)s++;});score2.textContent=`Score: ${s} / 7`;save();};
+reset2.onclick=()=>{collRows.forEach(r=>{delete r.dataset.choice;r.querySelectorAll(".colloc-opt").forEach(x=>x.classList.remove("chosen","good","incorrect"));r.querySelector(".mini-feedback").textContent="";});score2.textContent="";save();progress();};
+show2.onclick=()=>{collRows.forEach(r=>{const o=[...r.querySelectorAll(".colloc-opt")].find(x=>x.dataset.wrong==="true");r.querySelectorAll(".colloc-opt").forEach(x=>x.classList.remove("chosen","good","incorrect"));o.classList.add("chosen","good");r.dataset.choice=o.textContent.trim();r.querySelector(".mini-feedback").textContent="✓";});score2.textContent="Answers shown.";save();progress();};
+
+// EX 3
+const phraseInputs=[...document.querySelectorAll(".phrase-input")];
+phraseInputs.forEach(i=>i.oninput=()=>{i.classList.remove("correct","incorrect");save();progress();});
+check3.onclick=()=>{let s=0;phraseInputs.forEach(i=>{const ok=norm(i.value)===norm(i.dataset.answer);i.classList.toggle("correct",ok);i.classList.toggle("incorrect",!ok);i.parentElement.querySelector(".mini-feedback").textContent=ok?"✓ Correct":"✗ Check tense / pronoun";if(ok)s++;});score3.textContent=`Score: ${s} / 6`;save();};
+reset3.onclick=()=>{phraseInputs.forEach(i=>{i.value="";i.classList.remove("correct","incorrect");i.parentElement.querySelector(".mini-feedback").textContent="";});score3.textContent="";save();progress();};
+show3.onclick=()=>{phraseInputs.forEach(i=>{i.value=i.dataset.answer;i.classList.add("correct");i.classList.remove("incorrect");i.parentElement.querySelector(".mini-feedback").textContent="✓";});score3.textContent="Answers shown.";save();progress();};
+
+// CROSSWORD
+let selectedWord="1A";
+const cwCells=[...document.querySelectorAll(".cw-cell")];
+const cwInputs=cwCells.map(c=>c.querySelector("input"));
+const wordMap=Object.fromEntries(WORDS.map(w=>[`${w.num}${w.dir}`,w]));
+function wordCells(id){
+ const w=wordMap[id];if(!w)return[];
+ return [...w.answer].map((_,i)=>document.querySelector(`.cw-cell[data-r="${w.r+(w.dir==="D"?i:0)}"][data-c="${w.c+(w.dir==="A"?i:0)}"]`));
+}
+function selectWord(id,focus=true){
+ if(!wordMap[id])return;selectedWord=id;
+ document.querySelectorAll(".clue").forEach(c=>c.classList.toggle("active",c.dataset.word===id));
+ cwCells.forEach(c=>c.classList.toggle("active-word",c.dataset.words.split(" ").includes(id)));
+ const w=wordMap[id];cwStatus.textContent=`${w.num} ${w.dir==="A"?"Across":"Down"}: ${w.clue}`;
+ if(focus)wordCells(id)[0]?.querySelector("input").focus();
+}
+document.querySelectorAll(".clue").forEach(c=>c.onclick=()=>selectWord(c.dataset.word,true));
+cwCells.forEach(cell=>{
+ const inp=cell.querySelector("input");
+ cell.onclick=()=>{const ids=cell.dataset.words.split(" ");if(ids.length>1&&ids.includes(selectedWord))selectWord(ids[(ids.indexOf(selectedWord)+1)%ids.length],false);else selectWord(ids[0],false);inp.focus();};
+ inp.onfocus=()=>{cwCells.forEach(c=>c.classList.remove("current"));cell.classList.add("current");};
+ inp.oninput=()=>{
+  inp.value=inp.value.replace(/[^a-zA-Z]/g,"").slice(-1).toUpperCase();cell.classList.remove("correct","incorrect");
+  if(inp.value){const seq=wordCells(selectedWord),idx=seq.indexOf(cell);if(idx>=0&&idx<seq.length-1)seq[idx+1].querySelector("input").focus();}
+  save();progress();
+ };
+ inp.onkeydown=e=>{
+  const seq=wordCells(selectedWord),idx=seq.indexOf(cell);
+  if(e.key==="Backspace"&&!inp.value&&idx>0){e.preventDefault();const p=seq[idx-1].querySelector("input");p.focus();p.value="";save();}
+  if((e.key==="ArrowRight"||e.key==="ArrowDown")&&idx>=0&&idx<seq.length-1){e.preventDefault();seq[idx+1].querySelector("input").focus();}
+  if((e.key==="ArrowLeft"||e.key==="ArrowUp")&&idx>0){e.preventDefault();seq[idx-1].querySelector("input").focus();}
+ };
+});
+checkCW.onclick=()=>{let s=0;cwCells.forEach(c=>{const ok=c.querySelector("input").value.toUpperCase()===c.dataset.letter;c.classList.toggle("correct",ok);c.classList.toggle("incorrect",!ok);if(ok)s++;});scoreCW.textContent=`Letters correct: ${s} / 49`;save();progress();};
+resetCW.onclick=()=>{cwCells.forEach(c=>{c.querySelector("input").value="";c.classList.remove("correct","incorrect");});scoreCW.textContent="";save();progress();};
+showCW.onclick=()=>{cwCells.forEach(c=>{c.querySelector("input").value=c.dataset.letter;c.classList.add("correct");c.classList.remove("incorrect");});scoreCW.textContent="Crossword completed.";save();progress();};
+selectWord("1A",false);
+
+// FLASHCARDS
+let flashMode="enru",flashIndex=0,order=FLASH.map((_,i)=>i);
+const card=document.getElementById("flashcard");
+function currentCard(){return FLASH[order[flashIndex]]}
+function renderCard(){
+ card.classList.remove("flipped");const x=currentCard();
+ if(flashMode==="enru"){frontMain.textContent=x.en;backMain.textContent=x.ru;backSub.textContent=x.en;}
+ else{frontMain.textContent=x.ru;backMain.textContent=x.en;backSub.textContent="English";}
+ cardCounter.textContent=`Card ${flashIndex+1} / ${FLASH.length}`;
+}
+card.onclick=e=>{if(e.target.closest(".audio-btn"))return;card.classList.toggle("flipped");};
+card.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();card.classList.toggle("flipped");}};
+frontAudio.onclick=e=>{e.stopPropagation();speak(currentCard().en)};
+backAudio.onclick=e=>{e.stopPropagation();speak(currentCard().en)};
+nextCard.onclick=()=>{flashIndex=(flashIndex+1)%FLASH.length;renderCard();};
+prevCard.onclick=()=>{flashIndex=(flashIndex-1+FLASH.length)%FLASH.length;renderCard();};
+shuffleCards.onclick=()=>{for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}flashIndex=0;renderCard();};
+document.querySelectorAll(".mode").forEach(m=>m.onclick=()=>{document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));m.classList.add("active");flashMode=m.dataset.mode;renderCard();});
+renderCard();
+
+// ADJECTIVES
+document.querySelectorAll(".adj-pill").forEach(b=>b.onclick=()=>speak(b.dataset.en));
+const adjPool=["embarrassing","relaxing","frightening","exciting","stressful","unforgettable","awful","amazing","boring","surprising"];
+const adjQs=[...document.querySelectorAll(".adj-q")];
+adjQs.forEach(q=>{
+ const a=q.dataset.answer;
+ const ds=adjPool.filter(x=>x!==a).sort(()=>Math.random()-.5).slice(0,2);
+ [a,...ds].sort(()=>Math.random()-.5).forEach(o=>{
+  const b=document.createElement("button");b.type="button";b.className="adj-choice";b.textContent=o;
+  b.onclick=()=>{q.querySelectorAll(".adj-choice").forEach(x=>x.classList.remove("correct","incorrect"));const ok=o===a;b.classList.add(ok?"correct":"incorrect");q.dataset.done=ok?"1":"0";scoreAdj.textContent=`Correct: ${adjQs.filter(x=>x.dataset.done==="1").length} / 6`;save();};
+  q.querySelector(".adj-options").appendChild(b);
+ });
+});
+
+// SAVE
+function save(){
+ try{localStorage.setItem(STORAGE,JSON.stringify({
+  ex1:targets.map(t=>t.dataset.verb||""),
+  ex2:collRows.map(r=>r.dataset.choice||""),
+  ex3:phraseInputs.map(i=>i.value),
+  cw:cwInputs.map(i=>i.value)
+ }));}catch(e){}
+}
+function load(){
+ try{
+  const d=JSON.parse(localStorage.getItem(STORAGE)||"null");if(!d)return;
+  targets.forEach((t,i)=>{if(d.ex1?.[i])placeVerb(t,d.ex1[i]);});
+  collRows.forEach((r,i)=>{const v=d.ex2?.[i];if(v){const o=[...r.querySelectorAll(".colloc-opt")].find(x=>x.textContent.trim()===v);if(o){o.classList.add("chosen");r.dataset.choice=v;}}});
+  phraseInputs.forEach((i,n)=>i.value=d.ex3?.[n]||"");
+  cwInputs.forEach((i,n)=>i.value=(d.cw?.[n]||"").toUpperCase());
+ }catch(e){}
+}
+function progress(){
+ const total=7+7+6+49;
+ let done=targets.filter(t=>t.dataset.verb).length;
+ done+=collRows.filter(r=>r.dataset.choice).length;
+ done+=phraseInputs.filter(i=>norm(i.value)).length;
+ done+=cwInputs.filter(i=>i.value).length;
+ const pct=Math.round(done/total*100);progressBar.style.width=pct+"%";progressLabel.textContent=pct+"% completed";
+}
+resetAll.onclick=()=>{if(!confirm("Reset all saved progress?"))return;try{localStorage.removeItem(STORAGE)}catch(e){}location.reload();};
+load();refreshVerbs();progress();
+})();
+</script>
+</body>
+</html>
